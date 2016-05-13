@@ -8,12 +8,14 @@ public class Board {
 	
 	private int[][] board;
 	
-	static final int DIRECTION_NORTHWEST = 1;
+	static final int DIRECTION_NORTH = 1;
 	static final int DIRECTION_NORTHEAST = 2;
-	static final int DIRECTION_EAST = 3;
-	static final int DIRECTION_SOUTHEAST = 4;
+	static final int DIRECTION_SOUTHEAST = 3;
+	static final int DIRECTION_SOUTH = 4;
 	static final int DIRECTION_SOUTHWEST = 5;
-	static final int DIRECTION_WEST = 6;
+	static final int DIRECTION_NORTHWEST = 6;
+	static final int DIRECTION_EAST = 7;
+	static final int DIRECTION_WEST = 8;
 	
 	public Board () throws FileNotFoundException {
 		File boardMap = new File("BoardMap");
@@ -87,13 +89,15 @@ public class Board {
 			return false;
 		alreadyChecked[originalRow][originalColumn] = 1;
 		for (int direction = 1; direction <= 6; direction++) {
-			Point otherSpot = getAdjacent(originalRow, originalColumn, direction);
-			if (board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
-				Point jumpSpot = getAdjacent(otherSpot, direction);
-				if (isValidPoint(jumpSpot) &&
-						(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
-						canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
-					return true;					
+			if (direction != 1 && direction != 4) {
+				Point otherSpot = getAdjacent(originalRow, originalColumn, direction);
+				if (board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
+					Point jumpSpot = getAdjacent(otherSpot, direction);
+					if (isValidPoint(jumpSpot) &&
+							(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
+							canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
+						return true;					
+				}
 			}
 		}
 		return false;
