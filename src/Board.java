@@ -121,16 +121,6 @@ public class Board {
 			Board mainBoard = new Board();
 			BoardDisplay window = new BoardDisplay(mainBoard.board);
 			
-			try {
-				Thread.sleep(500);
-			}
-			catch (Exception e) {
-				
-			}
-			mainBoard.move(2,4,4,4);
-			System.out.println(mainBoard.board[4][4]);
-			window.refresh();
-			
 		} 
 		catch (FileNotFoundException e) {
 			e.printStackTrace();

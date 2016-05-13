@@ -18,7 +18,7 @@ public class BoardDisplay {
 	private static final Dimension BOARD_SIZE = new Dimension(600, 600);
 	private static final Dimension WINDOW_SIZE = new Dimension(650, 700);
 
-	public static final ImageIcon PADDING = new ImageIcon("padding.png");
+	public static final ImageIcon PADDING = new ImageIcon("resources/padding.png");
 	
 	
 	public BoardDisplay(int[][] board) {
@@ -51,7 +51,7 @@ public class BoardDisplay {
 				currentRow.add(padding);
 			}
 			for (int column = 0; column < 17; column++) {
-				JLabel circleLabel = new JLabel(new ImageIcon("Circle" + board[row][column] + ".png"));
+				JLabel circleLabel = new JLabel(new ImageIcon("resources/Circle" + board[row][column] + ".png"));
 				currentRow.add(circleLabel);
 			}
 			boardPanel.add(currentRow);
