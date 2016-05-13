@@ -7,16 +7,20 @@ import java.util.Scanner;
 public class Board {
 	
 	private int[][] board;
-	
-	static final int DIRECTION_NORTH = 1;
-	static final int DIRECTION_NORTHEAST = 2;
-	static final int DIRECTION_SOUTHEAST = 3;
-	static final int DIRECTION_SOUTH = 4;
-	static final int DIRECTION_SOUTHWEST = 5;
-	static final int DIRECTION_NORTHWEST = 6;
+
+	static final int DIRECTION_SOUTH = 1;
+	static final int DIRECTION_SOUTHEAST = 2;
+	static final int DIRECTION_NORTHEAST = 3;
+	static final int DIRECTION_NORTH = 4;
+	static final int DIRECTION_NORTHWEST = 5;
+	static final int DIRECTION_SOUTHWEST = 6;
 	static final int DIRECTION_EAST = 7;
 	static final int DIRECTION_WEST = 8;
 	
+	/** Creates a new board with the setup specified in BoardMap
+	 * 
+	 *  @throws FileNotFoundException
+	 */
 	public Board () throws FileNotFoundException {
 		File boardMap = new File("BoardMap");
 		Scanner inFile = new Scanner(boardMap);
@@ -37,10 +41,10 @@ public class Board {
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
 	 * 
-	 *  @param x1
-	 *  @param y1
-	 *  @param x2
-	 *  @param y2
+	 *  @param row1
+	 *  @param column1
+	 *  @param row2
+	 *  @param column2
 	 *  @return
 	 */
 	public static int isAdjacent(int row1, int column1, int row2, int column2) {
@@ -59,15 +63,33 @@ public class Board {
 		return 0;
 	}
 	
-	public Point getAdjacent(Point coordinates, int direction) {
-		return getAdjacent((int)coordinates.getX(), (int)coordinates.getY(), direction);
-	}
-	
+	/** Returns whether or not a point is a valid point on the board
+	 * 
+	 *  @param coordinates
+	 *  @return
+	 */
 	public boolean isValidPoint(Point coordinates) {
 		return (coordinates.getX() < 17 && coordinates.getX() >= 0 && coordinates.getY() >= 0 && coordinates.getY() < 17 &&
 				board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
 	}
 	
+	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
+	 * 
+	 *  @param coordinates
+	 *  @param direction
+	 *  @return
+	 */
+	public Point getAdjacent(Point coordinates, int direction) {
+		return getAdjacent((int)coordinates.getX(), (int)coordinates.getY(), direction);
+	}
+	
+	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
+	 * 
+	 *  @param row
+	 *  @param column
+	 *  @param direction
+	 *  @return
+	 */
 	public Point getAdjacent(int row, int column, int direction) {
 		if (direction == DIRECTION_SOUTHWEST)
 			return new Point(row, column + 1);
@@ -84,6 +106,15 @@ public class Board {
 		return null;
 	}
 	
+	/** A recursive algorithm for determine whether or not a piece can jump to the specified spot
+	 * 
+	 *  @param originalRow
+	 *  @param originalColumn
+	 *  @param newRow
+	 *  @param newColumn
+	 *  @param alreadyChecked
+	 *  @return
+	 */
 	public boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
 		if (alreadyChecked[originalRow][originalColumn] == 1)
 			return false;
@@ -103,6 +134,14 @@ public class Board {
 		return false;
 	}
 	
+	/** Checks if a move is valid
+	 * 
+	 *  @param originalRow
+	 *  @param originalColumn
+	 *  @param newRow
+	 *  @param newColumn
+	 *  @return
+	 */
 	public boolean isValidMove(int originalRow, int originalColumn, int newRow, int newColumn) {
 		if (board[newRow][newColumn] != 0)
 			return false;
@@ -111,6 +150,14 @@ public class Board {
 		return canJump(originalRow, originalColumn, newRow, newColumn, new int[17][17]);
 	}
 	
+	/** Moves a piece
+	 *  
+	 *  @param originalRow
+	 *  @param originalColumn
+	 *  @param newRow
+	 *  @param newColumn
+	 *  @return
+	 */
 	public boolean move(int originalRow, int originalColumn, int newRow, int newColumn) {
 		if (isValidMove(originalRow, originalColumn, newRow, newColumn)) {
 			board[newRow][newColumn] = board[originalRow][originalColumn];
