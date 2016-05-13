@@ -61,6 +61,11 @@ public class Board {
 		return getAdjacent((int)coordinates.getX(), (int)coordinates.getY(), direction);
 	}
 	
+	public boolean isValidPoint(Point coordinates) {
+		return (coordinates.getX() < 17 && coordinates.getX() >= 0 && coordinates.getY() >= 0 && coordinates.getY() < 17 &&
+				board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
+	}
+	
 	public Point getAdjacent(int row, int column, int direction) {
 		if (direction == DIRECTION_SOUTHWEST)
 			return new Point(row, column + 1);
@@ -77,13 +82,18 @@ public class Board {
 		return null;
 	}
 	
-	public boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn){
+	public boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
+		if (alreadyChecked[originalRow][originalColumn] == 1)
+			return false;
+		alreadyChecked[originalRow][originalColumn] = 1;
 		for (int direction = 1; direction <= 6; direction++) {
 			Point otherSpot = getAdjacent(originalRow, originalColumn, direction);
 			if (board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
 				Point jumpSpot = getAdjacent(otherSpot, direction);
-				return (((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
-						canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn));					
+				if (isValidPoint(jumpSpot) &&
+						(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
+						canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
+					return true;					
 			}
 		}
 		return false;
@@ -94,7 +104,7 @@ public class Board {
 			return false;
 		if (isAdjacent(originalRow, originalColumn, newRow, newColumn) > 0)
 			return true;
-		return canJump(originalRow, originalColumn, newRow, newColumn);
+		return canJump(originalRow, originalColumn, newRow, newColumn, new int[17][17]);
 	}
 	
 	public boolean move(int originalRow, int originalColumn, int newRow, int newColumn) {
@@ -110,17 +120,17 @@ public class Board {
 		try {
 			Board mainBoard = new Board();
 			BoardDisplay window = new BoardDisplay(mainBoard.board);
-			/*
+			
 			try {
 				Thread.sleep(500);
 			}
 			catch (Exception e) {
 				
 			}
-			mainBoard.move(3,4,4,5);
+			mainBoard.move(2,4,4,4);
 			System.out.println(mainBoard.board[4][4]);
 			window.refresh();
-			*/
+			
 		} 
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
