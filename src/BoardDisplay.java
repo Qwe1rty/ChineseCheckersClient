@@ -30,7 +30,7 @@ public class BoardDisplay {
 		//mainPanel.setLayout(new GridLayout(2, 1));
 		
 		boardPanel = new JPanel();
-		boardPanel.setLayout(new GridLayout(17, 1));
+		boardPanel.setLayout(new GridLayout(Board.NUM_ROWS, 1));
 		boardPanel.setMinimumSize(BOARD_SIZE);
 		boardPanel.setMaximumSize(BOARD_SIZE);
 		paintBoard();
@@ -43,14 +43,14 @@ public class BoardDisplay {
 	}
 	
 	private void paintBoard() {
-		for (int row = 0; row < 17; row++) {
+		for (int row = 0; row < Board.NUM_ROWS; row++) {
 			JPanel currentRow = new JPanel();
 			currentRow.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 			for (int numPadding = 16; numPadding > row; numPadding--) {
 				JLabel padding = new JLabel(PADDING);
 				currentRow.add(padding);
 			}
-			for (int column = 0; column < 17; column++) {
+			for (int column = 0; column < Board.NUM_COLUMNS; column++) {
 				JLabel circleLabel = new JLabel(new ImageIcon("resources/Circle" + board[row][column] + ".png"));
 				currentRow.add(circleLabel);
 			}
@@ -59,7 +59,7 @@ public class BoardDisplay {
 	}
 	
 	public void refresh() {
-		System.out.println("refresh");
+		//System.out.println("refresh");
 		boardPanel.removeAll();
 		paintBoard();
 		boardPanel.revalidate();

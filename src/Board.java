@@ -7,6 +7,9 @@ import java.util.Scanner;
 public class Board {
 	
 	private int[][] board;
+	
+	public static final int NUM_ROWS = 17;
+	public static final int NUM_COLUMNS = 17;
 
 	static final int DIRECTION_SOUTH = 1;
 	static final int DIRECTION_SOUTHEAST = 2;
@@ -19,24 +22,10 @@ public class Board {
 	
 	/** Creates a new board with the setup specified in BoardMap
 	 * 
-	 *  @throws FileNotFoundException
 	 */
-	public Board () throws FileNotFoundException {
-		File boardMap = new File("BoardMap");
-		Scanner inFile = new Scanner(boardMap);
-		
+	public Board () {
 		board = new int[17][17];
-		
-		// Block off ineligible spots
-		for (int row = 0; row < board.length; row++) {
-			String boardRow = inFile.nextLine();
-			for (int column = 0; column < board.length; column++) {
-				if (boardRow.charAt(column) == 'x')
-					board[row][column] = -1;
-				else
-					board[row][column] = Character.getNumericValue(boardRow.charAt(column));
-			}
-		}
+		newGame();
 	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
@@ -69,8 +58,8 @@ public class Board {
 	 *  @return
 	 */
 	public boolean isValidPoint(Point coordinates) {
-		return (coordinates.getX() < 17 && coordinates.getX() >= 0 && coordinates.getY() >= 0 && coordinates.getY() < 17 &&
-				board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
+		return (coordinates.getX() < NUM_ROWS && coordinates.getX() >= 0 && coordinates.getY() >= 0 
+				&& coordinates.getY() < NUM_COLUMNS && board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
 	}
 	
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
@@ -143,7 +132,7 @@ public class Board {
 	 *  @return
 	 */
 	public boolean isValidMove(int originalRow, int originalColumn, int newRow, int newColumn) {
-		if (board[newRow][newColumn] != 0)
+		if (newRow >= NUM_ROWS || newColumn >= NUM_COLUMNS || board[newRow][newColumn] != 0)
 			return false;
 		if (isAdjacent(originalRow, originalColumn, newRow, newColumn) > 0)
 			return true;
@@ -167,15 +156,31 @@ public class Board {
 		return false;
 	}
 	
-	public static void main (String[] args) {
+	public boolean newGame() {
 		try {
-			Board mainBoard = new Board();
-			BoardDisplay window = new BoardDisplay(mainBoard.board);
+			File boardMap = new File("BoardMap");
+			Scanner inFile = new Scanner(boardMap);
 			
-		} 
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
+			// Block off ineligible spots
+			for (int row = 0; row < NUM_ROWS; row++) {
+				String boardRow = inFile.nextLine();
+				for (int column = 0; column < NUM_COLUMNS; column++) {
+					if (boardRow.charAt(column) == 'x')
+						board[row][column] = -1;
+					else
+						board[row][column] = Character.getNumericValue(boardRow.charAt(column));
+				}
+			}
+			return true;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public int[][] getBoard() {
+		return board;
 	}
 
 }
