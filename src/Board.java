@@ -182,5 +182,11 @@ public class Board {
 	public int[][] getBoard() {
 		return board;
 	}
+	
+	public static void main (String[] args) {
+		//Board newBoard = new Board();
+		//BoardDisplay window = new BoardDisplay(newBoard.board);
+		//window.declareWinner(6,5);
+	}
 
 }

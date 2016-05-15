@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,6 +9,8 @@ import java.util.Scanner;
 
 
 public class Client {
+	
+	public static final int SERVER_PORT = 1337;
 	
 	public static final int SERVER_MOVE = 1;
 	public static final int SERVER_NEW_GAME = 2;
@@ -36,7 +39,7 @@ public class Client {
 
 		Socket mySocket;
 		try {
-			mySocket = new Socket(IPAddress, 1337);
+			mySocket = new Socket(IPAddress, SERVER_PORT);
 			// Make reader
 			myStream = new InputStreamReader(mySocket.getInputStream());
 			myReader = new BufferedReader(myStream);
@@ -97,12 +100,14 @@ public class Client {
 			player = myReader.read();
 			board.newGame();
 			boardWindow.refresh();
+			boardWindow.setPlayer(player);
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
 			int colour = myReader.read();
 			int row = myReader.read();
 			int column = myReader.read();
 			board.getBoard()[row][column] = colour;
+			boardWindow.refresh();
 		}
 		else if (messageType == SERVER_TURN) {
 			//AI.makeMove();
@@ -114,7 +119,8 @@ public class Client {
 			// To do
 		}
 		else if (messageType == SERVER_WIN) {
-			// To do
+			int winner = myReader.read();
+			boardWindow.declareWinner(winner, player);
 		}
 	}
 	
