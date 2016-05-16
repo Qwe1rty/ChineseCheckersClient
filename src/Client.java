@@ -74,11 +74,7 @@ public class Client {
 	 *  @return
 	 */
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
-		myWriter.println(CLIENT_MOVE);
-		myWriter.println(originalRow);
-		myWriter.println(originalColumn);
-		myWriter.println(newRow);
-		myWriter.println(newColumn);
+		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		myWriter.flush();
 		return true;
 	}
@@ -134,7 +130,7 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
-			//AI.makeMove(board, player);
+			//Algorithm.makeMove(board, player);
 			System.out.println("Turn");
 		}
 		else if (messageType == SERVER_INVALID_MOVE) {

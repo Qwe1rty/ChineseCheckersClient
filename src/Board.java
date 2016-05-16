@@ -104,7 +104,7 @@ public class Board {
 	 *  @param alreadyChecked
 	 *  @return
 	 */
-	public boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
+	private boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
 		if (alreadyChecked[originalRow][originalColumn] == 1)
 			return false;
 		alreadyChecked[originalRow][originalColumn] = 1;
