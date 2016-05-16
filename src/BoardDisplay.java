@@ -35,8 +35,8 @@ public class BoardDisplay {
 		JPanel mainPanel = new JPanel();
 		
 		playerPanel = new JPanel();
-		JLabel playerLabel = new JLabel("Player: ");
 		UIManager.put("Label.font", DEFAULT_FONT);
+		JLabel playerLabel = new JLabel("Player: ");
 		//playerPanel.setSize(100, 700);
 		
 		playerPanel.add(playerLabel);

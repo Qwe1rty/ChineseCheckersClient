@@ -156,6 +156,10 @@ public class Board {
 		return false;
 	}
 	
+	/** Initializes the board for a new game
+	 * 
+	 *  @return
+	 */
 	public boolean newGame() {
 		try {
 			File boardMap = new File("BoardMap");
@@ -179,13 +183,16 @@ public class Board {
 		}
 	}
 	
+	/** Gets the board
+	 *  @return the board
+	 */
 	public int[][] getBoard() {
 		return board;
 	}
 	
 	public static void main (String[] args) {
-		//Board newBoard = new Board();
-		//BoardDisplay window = new BoardDisplay(newBoard.board);
+		Board newBoard = new Board();
+		BoardDisplay window = new BoardDisplay(newBoard.board);
 		//window.declareWinner(6,5);
 	}
 
