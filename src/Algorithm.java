@@ -53,6 +53,31 @@ public class Algorithm {
 				}
 			}
 		} else if (color == 3) { // Yellow, top right
+			for (int row =12; row>8; row++)
+			{
+				if (board[row][4]==0){
+				targetRow=row;
+				targetColumn=4;
+				}
+			}
+			for (int row =12; row>9; row++)
+			{
+				if (board[row][5]==0){
+				targetRow=row;
+				targetColumn=5;
+				}
+			}
+			for (int row =12; row>10; row++)
+			{
+				if (board[row][6]==0){
+				targetRow=row;
+				targetColumn=6;
+				}
+			}
+			if (board[12][7]==0){
+				targetRow=12;
+				targetColumn=7;
+			}
 			
 		} else if (color == 4) { // Green, top
 			for (int row = 16; row >= 0; row--) {
@@ -73,7 +98,28 @@ public class Algorithm {
 				}
 			}
 		} else if (color == 6) { // Purple, bottom left
-			
+			for (int col = 9; col < 13; col++) {
+				if (board[4][col] == 0) {
+					targetRow = 4;
+					targetColumn = col;
+				}
+			}
+			for (int col = 10; col < 13; col++) {
+				if (board[5][col] == 0) {
+					targetRow = 5;
+					targetColumn = col;
+				}
+			}
+			for (int col = 11; col < 13; col++) {
+				if (board[6][col] == 0) {
+					targetRow = 6;
+					targetColumn = col;
+				}
+			}
+			if (board[7][12] == 0) {
+				targetRow = 7;
+				targetColumn = 12;
+			}
 		} else System.out.println("you dun goofed, son");
 	}
 	
