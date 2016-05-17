@@ -16,8 +16,8 @@ class Basics {
 	
 	
 	
-	 
-	 
+	
+	//public
 	
 	
 	
