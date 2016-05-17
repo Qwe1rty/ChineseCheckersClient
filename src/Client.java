@@ -31,6 +31,9 @@ public class Client {
 	
 	BoardDisplay boardWindow;
 	
+	/** Creates and sets up a new client
+	 * 
+	 */
 	public Client() {
 		Scanner keyboard = new Scanner(System.in);
 		
@@ -62,23 +65,30 @@ public class Client {
 		
 	}
 	
+	/** Sends a move to the server
+	 * 
+	 *  @param originalRow
+	 *  @param originalColumn
+	 *  @param newRow
+	 *  @param newColumn
+	 *  @return
+	 */
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
-		myWriter.println(CLIENT_MOVE);
-		myWriter.println(originalRow);
-		myWriter.println(originalColumn);
-		myWriter.println(newRow);
-		myWriter.println(newColumn);
+		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		myWriter.flush();
 		return true;
 	}
 	
+	/** Waits for and receives messages from the server
+	 *  
+	 */
 	public void receiveFromServer() {
 		while(true) {
 			try {
 				if (myReader.ready()){
-					int messageType = myReader.read();
-					System.out.println(messageType);
-					read(messageType);
+					String input = myReader.readLine();
+					System.out.println(input);
+					read(input);
 				}
 			}
 			catch (IOException e){
@@ -87,60 +97,87 @@ public class Client {
 		}
 	}
 	
-	private void read(int messageType) throws IOException {
+	/** Reads the message from the server and executes the appropriate actions
+	 * 
+	 *  @param messageType
+	 *  @throws IOException
+	 */
+	private void read(String input) throws IOException {
+		String[] message = input.split(" ");
+		int messageType = Integer.parseInt(message[0]);
 		if (messageType == SERVER_MOVE) {
-			int originalRow = myReader.read();
-			int originalColumn = myReader.read();
-			int newRow = myReader.read();
-			int newColumn = myReader.read();
+			int originalRow = Integer.parseInt(message[1]);
+			int originalColumn = Integer.parseInt(message[2]);
+			int newRow = Integer.parseInt(message[3]);
+			int newColumn = Integer.parseInt(message[4]);
 			board.move(originalRow, originalColumn, newRow, newColumn);
 			boardWindow.refresh();
+			System.out.println("Move " + newRow + " " + newColumn);
 		}
 		else if (messageType == SERVER_NEW_GAME) {
-			player = myReader.read();
+			player = Integer.parseInt(message[1]);
 			board.newGame();
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
+			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
-			int colour = myReader.read();
-			int row = myReader.read();
-			int column = myReader.read();
+			int colour = Integer.parseInt(message[1]);
+			int row = Integer.parseInt(message[2]);
+			int column = Integer.parseInt(message[3]);
 			board.getBoard()[row][column] = colour;
 			boardWindow.refresh();
+			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
-			//AI.makeMove();
+			//Algorithm.makeMove(board, player);
+			System.out.println("Turn");
 		}
 		else if (messageType == SERVER_INVALID_MOVE) {
 			// To do
+			System.out.println("Invalid Move");
 		}
 		else if (messageType == SERVER_MOVE_TIMEOUT) {
 			// To do
+			System.out.println("Timeout");
 		}
 		else if (messageType == SERVER_WIN) {
-			int winner = myReader.read();
+			int winner = Integer.parseInt(message[1]);
 			boardWindow.declareWinner(winner, player);
+			System.out.println("Win");
 		}
 	}
 	
+	/** Gets the board 
+	 *  @return
+	 */
 	public Board getBoard() {
 		return board;
 	}
 
+	/** Gets the player that the client is playing
+	 *  @return
+	 */
 	public int getPlayer() {
 		return player;
 	}
 
+	/** Sets the board
+	 *  @param board
+	 */
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 
+	/** Sets the player that this client is playing
+	 *  @param player
+	 */
 	public void setPlayer(int player) {
 		this.player = player;
 	}
 
 	public static void main(String[] args) {
+		// Create the client and go
 		Client client = new Client();
 	}
 
