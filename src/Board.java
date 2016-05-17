@@ -21,20 +21,23 @@ public class Board {
 	static final int DIRECTION_WEST = 8;
 	
 	/** Creates a new board with the setup specified in BoardMap
-	 * 
+	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
+	 *  Postcondition: a new board with the setup specified in BoardMap has been created and returned
 	 */
 	public Board () {
-		board = new int[17][17];
+		board = new int[NUM_ROWS][NUM_COLUMNS];
 		newGame();
 	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
-	 * 
-	 *  @param row1
-	 *  @param column1
-	 *  @param row2
-	 *  @param column2
-	 *  @return
+	 *  Precondition: row1, column1, row2, and column2 are valid integers
+	 *  Postcondition: the direction (as an integer) the two pieces are adjacent to each other in has been returned,
+	 *  otherwise 0 if the two positions are not adjacent
+	 *  @param row1 the row of the piece to check if the other piece is adjacent to
+	 *  @param column1 the column of the piece to check if the other piece is adjacent to
+	 *  @param row2 the row of the piece that is checked for adjacency to the first piece
+	 *  @param column2 the row of the piece that is checked for adjacency to the first piece
+	 *  @return the direction that the pieces are adjacent in (as an integer constant), otherwise 0 if not adjacent
 	 */
 	public static int isAdjacent(int row1, int column1, int row2, int column2) {
 		if (row1 == row2 && column1 + 1 == column2)
@@ -53,9 +56,10 @@ public class Board {
 	}
 	
 	/** Returns whether or not a point is a valid point on the board
-	 * 
-	 *  @param coordinates
-	 *  @return
+	 *  Precondition: coordinates is an initialized Point object with X and Y
+	 *  Postcondition: whether or not the point is a valid point has been returned
+	 *  @param coordinates the coordinates to check whether or not is valid
+	 *  @return whether or not the coordinates are valid for the board
 	 */
 	public boolean isValidPoint(Point coordinates) {
 		return (coordinates.getX() < NUM_ROWS && coordinates.getX() >= 0 && coordinates.getY() >= 0 
@@ -63,10 +67,13 @@ public class Board {
 	}
 	
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
-	 * 
+	 *  Precondition: coordinates is an initialized Point object with X and Y and direction is an integer representing
+	 *  one of the direction constants
+	 *  Postcondition: a Point containing the row (X) and column (Y) 
 	 *  @param coordinates
 	 *  @param direction
-	 *  @return
+	 *  @return a Point containing the row (X) and column (Y) of the point adjacent to the given point in the given
+	 *  direction
 	 */
 	public Point getAdjacent(Point coordinates, int direction) {
 		return getAdjacent((int)coordinates.getX(), (int)coordinates.getY(), direction);
@@ -136,7 +143,7 @@ public class Board {
 			return false;
 		if (isAdjacent(originalRow, originalColumn, newRow, newColumn) > 0)
 			return true;
-		return canJump(originalRow, originalColumn, newRow, newColumn, new int[17][17]);
+		return canJump(originalRow, originalColumn, newRow, newColumn, new int[NUM_ROWS][NUM_COLUMNS]);
 	}
 	
 	/** Moves a piece

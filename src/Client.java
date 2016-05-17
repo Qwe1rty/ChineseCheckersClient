@@ -28,6 +28,7 @@ public class Client {
 	
 	private Board board;
 	private int player;
+	private int currentTurn;
 	
 	BoardDisplay boardWindow;
 	
@@ -119,6 +120,7 @@ public class Client {
 			board.newGame();
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
+			currentTurn = 0;
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -130,7 +132,9 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
-			//Algorithm.makeMove(board, player);
+			//int[] move = Algorithm.makeMove(board, player);
+			//myWriter.println(CLIENT_MOVE + " " + move[0] + " " + move[1] + " " + move[2] + " " + move[3]);
+			currentTurn++;
 			System.out.println("Turn");
 		}
 		else if (messageType == SERVER_INVALID_MOVE) {
