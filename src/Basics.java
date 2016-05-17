@@ -12,6 +12,17 @@ class Basics {
 	static final int DIRECTION_SOUTHEAST = 4;
 	static final int DIRECTION_SOUTHWEST = 5;
 	static final int DIRECTION_WEST = 6;
+	
+	
+	
+	
+	
+	public 
+	
+	
+	
+	
+	
 
 	public void Opening() {
 		boolean done = false;
