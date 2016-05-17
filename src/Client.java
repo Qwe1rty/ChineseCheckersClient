@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Client {
 	
-	public static final int SERVER_PORT = 1337;
+	public static final int SERVER_PORT = 420;
 	
 	public static final int SERVER_MOVE = 1;
 	public static final int SERVER_NEW_GAME = 2;
@@ -105,6 +105,7 @@ public class Client {
 	 */
 	private void read(String input) throws IOException {
 		String[] message = input.split(" ");
+		System.out.println(message);
 		int messageType = Integer.parseInt(message[0]);
 		if (messageType == SERVER_MOVE) {
 			int originalRow = Integer.parseInt(message[1]);

@@ -11,14 +11,14 @@ public class Board {
 	public static final int NUM_ROWS = 17;
 	public static final int NUM_COLUMNS = 17;
 
-	static final int DIRECTION_SOUTH = 1;
-	static final int DIRECTION_SOUTHEAST = 2;
-	static final int DIRECTION_NORTHEAST = 3;
-	static final int DIRECTION_NORTH = 4;
-	static final int DIRECTION_NORTHWEST = 5;
-	static final int DIRECTION_SOUTHWEST = 6;
-	static final int DIRECTION_EAST = 7;
-	static final int DIRECTION_WEST = 8;
+	public static final int DIRECTION_SOUTH = 1;
+	public static final int DIRECTION_SOUTHEAST = 2;
+	public static final int DIRECTION_NORTHEAST = 3;
+	public static final int DIRECTION_NORTH = 4;
+	public static final int DIRECTION_NORTHWEST = 5;
+	public static final int DIRECTION_SOUTHWEST = 6;
+	public static final int DIRECTION_EAST = 7;
+	public static final int DIRECTION_WEST = 8;
 	
 	/** Creates a new board with the setup specified in BoardMap
 	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
@@ -69,9 +69,9 @@ public class Board {
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
 	 *  Precondition: coordinates is an initialized Point object with X and Y and direction is an integer representing
 	 *  one of the direction constants
-	 *  Postcondition: a Point containing the row (X) and column (Y) 
-	 *  @param coordinates
-	 *  @param direction
+	 *  Postcondition: the adjacent Point containing the row (X) and column (Y) has been returned
+	 *  @param coordinates the original point to find the point adjacent from
+	 *  @param direction the direction of the adjacent point from the original point
 	 *  @return a Point containing the row (X) and column (Y) of the point adjacent to the given point in the given
 	 *  direction
 	 */
@@ -80,10 +80,12 @@ public class Board {
 	}
 	
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
-	 * 
-	 *  @param row
-	 *  @param column
-	 *  @param direction
+	 *  Precondition: row and column are valid integers representing a position on the boardand direction 
+	 *  is an integer representing one of the direction constants
+	 *  Postcondition: the direction that the points are adjacent in has been returned
+	 *  @param row the row of the original point to search from
+	 *  @param column the column of the original point to search from
+	 *  @param direction the direction from the original point to find the adjacent point in
 	 *  @return
 	 */
 	public Point getAdjacent(int row, int column, int direction) {
