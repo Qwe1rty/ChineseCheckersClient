@@ -6,6 +6,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/** The Client Class
+ *  Communicates with the server for the Chinese Checkers AI
+ *  @author Darren Chan
+ *	@version May 17, 2016
+ */
 
 public class Client {
 	
@@ -32,17 +37,21 @@ public class Client {
 	BoardDisplay boardWindow;
 	
 	/** Creates and sets up a new client
-	 * 
+	 *  Precondition: The server for the Chinese Checkers game has been started
+	 *  Postcondition: A new client has been set up and is now waiting for instructions from the server
 	 */
 	public Client() {
 		Scanner keyboard = new Scanner(System.in);
 		
+		// Ask for IP Address from user (in console)
 		System.out.println("Enter the Server IP Address: ");
 		String IPAddress = keyboard.nextLine();
 
 		Socket mySocket;
 		try {
+			// Connect to server
 			mySocket = new Socket(IPAddress, SERVER_PORT);
+			
 			// Make reader
 			myStream = new InputStreamReader(mySocket.getInputStream());
 			myReader = new BufferedReader(myStream);
@@ -65,13 +74,16 @@ public class Client {
 		
 	}
 	
-	/** Sends a move to the server
-	 * 
-	 *  @param originalRow
-	 *  @param originalColumn
-	 *  @param newRow
-	 *  @param newColumn
-	 *  @return
+	/** Sends a move to the server (does not error check for validity of move or make the move on the internal
+	 *  board)
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board
+	 *  Postcondition: the move has been sent to the server, and true has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space that the piece is to move to
+	 *  @param newColumn the column of the space that the piece is to move to
+	 *  @return true once the move has been sent to the server
 	 */
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
 		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
@@ -80,7 +92,8 @@ public class Client {
 	}
 	
 	/** Waits for and receives messages from the server
-	 *  
+	 *  Precondition: myReader is an initialized PrintWriter that is receiving from the server
+	 *  Postcondition: None (does not ever stop)
 	 */
 	public void receiveFromServer() {
 		while(true) {
@@ -98,24 +111,30 @@ public class Client {
 	}
 	
 	/** Reads the message from the server and executes the appropriate actions
-	 * 
-	 *  @param messageType
-	 *  @throws IOException
+	 *  Precondition: input is a valid String, and messages are being sent in the proper CCCP
+	 *  Postcondition: the appropriate instruction from the server has been executed, if it is one
+	 *  @param input the message sent from the the server to interpret
 	 */
-	private void read(String input) throws IOException {
+	private void read(String input) {
+		// Split input into individual characters
 		String[] message = input.split(" ");
 		System.out.println(message);
+		
+		// Determine message type
 		int messageType = Integer.parseInt(message[0]);
 		if (messageType == SERVER_MOVE) {
+			// Read off move coordinates and make move on internal board
 			int originalRow = Integer.parseInt(message[1]);
 			int originalColumn = Integer.parseInt(message[2]);
 			int newRow = Integer.parseInt(message[3]);
 			int newColumn = Integer.parseInt(message[4]);
-			board.move(originalRow, originalColumn, newRow, newColumn);
+			if(!board.move(originalRow, originalColumn, newRow, newColumn))
+				System.out.println("Invalid Move!");
 			boardWindow.refresh();
 			System.out.println("Move " + newRow + " " + newColumn);
 		}
 		else if (messageType == SERVER_NEW_GAME) {
+			// Read off player and start/restart game
 			player = Integer.parseInt(message[1]);
 			board.newGame();
 			boardWindow.refresh();
@@ -124,6 +143,7 @@ public class Client {
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
+			// Read off colour and location of each piece and place on internal board
 			int colour = Integer.parseInt(message[1]);
 			int row = Integer.parseInt(message[2]);
 			int column = Integer.parseInt(message[3]);
@@ -132,9 +152,11 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
+			// Make and send move
 			//int[] move = Algorithm.makeMove(board, player);
 			int[] move = opening();
-			myWriter.println(CLIENT_MOVE + " " + move[0] + " " + move[1] + " " + move[2] + " " + move[3]);
+			sendMove(move[0], move[1], move[2], move[3]);
+			// Keep track of turns
 			currentTurn++;
 			System.out.println("Turn");
 		}
@@ -147,6 +169,7 @@ public class Client {
 			System.out.println("Timeout");
 		}
 		else if (messageType == SERVER_WIN) {
+			// Read off and declare winner
 			int winner = Integer.parseInt(message[1]);
 			boardWindow.declareWinner(winner, player);
 			System.out.println("Win");
@@ -154,28 +177,28 @@ public class Client {
 	}
 	
 	/** Gets the board 
-	 *  @return
+	 *  @return the current board object
 	 */
 	public Board getBoard() {
 		return board;
 	}
 
 	/** Gets the player that the client is playing
-	 *  @return
+	 *  @return the current player
 	 */
 	public int getPlayer() {
 		return player;
 	}
 
 	/** Sets the board
-	 *  @param board
+	 *  @param board the board object to set the board as
 	 */
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 
 	/** Sets the player that this client is playing
-	 *  @param player
+	 *  @param player the player to set the player as
 	 */
 	public void setPlayer(int player) {
 		this.player = player;
@@ -449,9 +472,7 @@ public class Client {
 			 
 		}
 		return nextMove;
-	}
-	
-	
+	}	
 	
 	public static void main(String[] args) {
 		// Create the client and go

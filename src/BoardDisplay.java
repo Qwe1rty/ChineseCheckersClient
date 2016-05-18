@@ -9,6 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+/** The Board Display Class
+ *  Handles the display for the current state of the Chinese Checkers board
+ *  @author Darren Chan
+ *	@version May 17, 2016
+ */
 
 public class BoardDisplay {
 	
@@ -27,6 +32,11 @@ public class BoardDisplay {
 	
 	public static final String[] PLAYER_COLOURS = { "Red", "Orange", "Yellow", "Green", "Blue", "Purple" };
 	
+	/** Creates and sets up the board display
+	 *  Precondition: board is an initialized 2D array of integers
+	 *  Postcondition: a new window has been created displaying the current state of the board
+	 *  @param board the board to make the display of
+	 */
 	public BoardDisplay(int[][] board) {
 		this.board = board;
 		
@@ -56,14 +66,23 @@ public class BoardDisplay {
 		mainWindow.setVisible(true);
 	}
 	
+	/** Paints boardPanel with the current state of the board
+	 *  Precondition: All the padding and circle images are in the resources folder, and board has been 
+	 *  initialized as a 2D array
+	 *  Postcondition: the boardPanel has been drawn with the current state of the board
+	 */
 	private void paintBoard() {
 		for (int row = 0; row < Board.NUM_ROWS; row++) {
 			JPanel currentRow = new JPanel();
 			currentRow.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+			
+			// Put in padding to make the board display correctly
 			for (int numPadding = 16; numPadding > row; numPadding--) {
 				JLabel padding = new JLabel(PADDING);
 				currentRow.add(padding);
 			}
+			
+			// Place the actual circles to represent the pieces
 			for (int column = 0; column < Board.NUM_COLUMNS; column++) {
 				JLabel circleLabel = new JLabel(new ImageIcon("resources/Circle" + board[row][column] + ".png"));
 				currentRow.add(circleLabel);
@@ -72,6 +91,11 @@ public class BoardDisplay {
 		}
 	}
 	
+	/** Displays the current player
+	 *  Precondition: playerNumber is a valid integer and player number (0 < playerNumber <= PLAYER_COLOURS.size)
+	 *  Postcondition: the current player (playerNumber) is now displayed at the top of the window
+	 *  @param playerNumber the number of the player that the client is currently playing as
+	 */
 	public void setPlayer(int playerNumber) {
 		playerPanel.removeAll();
 		JLabel newPlayerLabel = new JLabel("Player " + playerNumber + ": " + PLAYER_COLOURS[playerNumber - 1]);
@@ -80,6 +104,14 @@ public class BoardDisplay {
 		playerPanel.repaint();	
 	}
 
+	/** Displays that a player has won and whether or not this player (the client) has won
+	 *  Precondition: playerNumber and currentPlayer are valid integers corresponding to a valid
+	 *  player number (greater than 0 and less than or equal to PLAYER_COLOURS.size)
+	 *  Postcondition: The winner and whether or not the client won is now displayed at the top
+	 *  of the window
+	 *  @param playerNumber the number of the player that won
+	 *  @param currentPlayer the number of the player that the client is playing as
+	 */
 	public void declareWinner(int playerNumber, int currentPlayer) {
 		playerPanel.removeAll();
 		JLabel newPlayerLabel;
@@ -96,6 +128,11 @@ public class BoardDisplay {
 		playerPanel.repaint();	
 	}
 	
+	/** Refreshes the board to display the current state
+	 *  Precondition: All the padding and circle images are in the resources folder, and board has been 
+	 *  initialized as a 2D array
+	 *  Postcondition: the board window has been refreshed and now displays the current state of the board
+	 */
 	public void refresh() {
 		//System.out.println("refresh");
 		boardPanel.removeAll();
