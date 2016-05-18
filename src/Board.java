@@ -3,6 +3,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/** The Board Class
+ *  Stores the data and methods relating to a Chinese Checkers game board
+ *  @author Darren Chan
+ *	@version May 17, 2016
+ */
 
 public class Board {
 	
@@ -30,7 +35,8 @@ public class Board {
 	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
-	 *  Precondition: row1, column1, row2, and column2 are valid integers
+	 *  Precondition: row1, column1, row2, and column2 are valid integers that correspond to two points
+	 *  on the board
 	 *  Postcondition: the direction (as an integer) the two pieces are adjacent to each other in has been returned,
 	 *  otherwise 0 if the two positions are not adjacent
 	 *  @param row1 the row of the piece to check if the other piece is adjacent to
@@ -66,6 +72,17 @@ public class Board {
 				&& coordinates.getY() < NUM_COLUMNS && board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
 	}
 	
+	/** Returns whether or not a point is a valid point on the board
+	 *  Precondition: row and column are valid integers
+	 *  Postcondition: whether or not the point is a valid point has been returned
+	 *  @param row the row of the point to check if is valid
+	 *  @param column the column of the point to check if is valid
+	 *  @return whether or not the coordinates are valid for the board
+	 */
+	public boolean isValidPoint(int row, int column) {
+		return (row < NUM_ROWS && row >= 0 && column >= 0 && column < NUM_COLUMNS && board[row][column] > -1);
+	}
+	
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
 	 *  Precondition: coordinates is an initialized Point object with X and Y and direction is an integer representing
 	 *  one of the direction constants
@@ -86,7 +103,8 @@ public class Board {
 	 *  @param row the row of the original point to search from
 	 *  @param column the column of the original point to search from
 	 *  @param direction the direction from the original point to find the adjacent point in
-	 *  @return
+	 *  @return a Point containing the row (X) and column (Y) of the point adjacent to the given point in the given
+	 *  direction
 	 */
 	public Point getAdjacent(int row, int column, int direction) {
 		if (direction == DIRECTION_SOUTHWEST)
@@ -105,23 +123,33 @@ public class Board {
 	}
 	
 	/** A recursive algorithm for determine whether or not a piece can jump to the specified spot
-	 * 
-	 *  @param originalRow
-	 *  @param originalColumn
-	 *  @param newRow
-	 *  @param newColumn
-	 *  @param alreadyChecked
-	 *  @return
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board, and alreadyChecked is an initialized NUM_ROWS by NUM_COLUMNS
+	 *  integer array
+	 *  Postcondition: whether or not a piece can jump from the original point to the new point has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space to jump to
+	 *  @param newColumn the column of the space to jump to
+	 *  @param alreadyChecked an array listing all the spaces already checked in this iteration of the algorithm
+	 *  @return whether or not a piece positioned at originalRow, originalColumn can jump to newRow, newColumn,
+	 *  possibly using multiple jumps
 	 */
 	private boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
+		// Check if this spot has already been visited
 		if (alreadyChecked[originalRow][originalColumn] == 1)
 			return false;
+		
 		alreadyChecked[originalRow][originalColumn] = 1;
-		for (int direction = 1; direction <= 6; direction++) {
-			if (direction != 1 && direction != 4) {
+		// Check in all possible piece directions - not north or south
+		for (int direction = 1; direction <= 8; direction++) {
+			if (direction != DIRECTION_NORTH && direction != DIRECTION_SOUTH) {
+				// Check if there's a piece to jump over in that direction
 				Point otherSpot = getAdjacent(originalRow, originalColumn, direction);
 				if (board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
 					Point jumpSpot = getAdjacent(otherSpot, direction);
+					// Check if that spot beyond the piece is where you want to go, or if it's possible to jump to 
+					//the spot you want to go from that spot
 					if (isValidPoint(jumpSpot) &&
 							(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
 							canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
@@ -132,29 +160,45 @@ public class Board {
 		return false;
 	}
 	
-	/** Checks if a move is valid
-	 * 
-	 *  @param originalRow
-	 *  @param originalColumn
-	 *  @param newRow
-	 *  @param newColumn
-	 *  @return
+	/** Checks if moving a piece from one position to another is valid
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board
+	 *  Postcondition: whether or not a piece moving from the original spot to the new spot would be
+	 *  valid has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space to check if a move to there is valid
+	 *  @param newColumn the column of the space to check if a move to there is valid
+	 *  @return whether or not a piece positioned at originalRow, originalColumn can move to the spot at
+	 *  newRow, newColumn
 	 */
 	public boolean isValidMove(int originalRow, int originalColumn, int newRow, int newColumn) {
-		if (newRow >= NUM_ROWS || newColumn >= NUM_COLUMNS || board[newRow][newColumn] != 0)
+		// Check if the original and new spots are valid, if the new spot is empty
+		if (!isValidPoint(originalRow, originalColumn) || !isValidPoint(newRow, newColumn)
+				|| board[newRow][newColumn] != 0)
 			return false;
+		
+		// Check if the spots are identical
+		if (originalRow == newRow && originalColumn == newColumn)
+			return false;
+		
+		// Check if the two spots are beside each other
 		if (isAdjacent(originalRow, originalColumn, newRow, newColumn) > 0)
 			return true;
+		
+		// Check if you can jump from the original point to the new point
 		return canJump(originalRow, originalColumn, newRow, newColumn, new int[NUM_ROWS][NUM_COLUMNS]);
 	}
 	
-	/** Moves a piece
-	 *  
-	 *  @param originalRow
-	 *  @param originalColumn
-	 *  @param newRow
-	 *  @param newColumn
-	 *  @return
+	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board
+	 *  Postcondition: whether or not the move was successfully made has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space to move the piece to
+	 *  @param newColumn the column of the space to move the piece to
+	 *  @return whether or not the move was successfully made (i.e. whether or not it is valid)
 	 */
 	public boolean move(int originalRow, int originalColumn, int newRow, int newColumn) {
 		if (isValidMove(originalRow, originalColumn, newRow, newColumn)) {
@@ -165,12 +209,30 @@ public class Board {
 		return false;
 	}
 	
+	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board
+	 *  Postcondition: whether or not the move was successfully made has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space to move the piece to
+	 *  @param newColumn the column of the space to move the piece to
+	 *  @return whether or not the move was successfully made (i.e. whether or not it is valid)
+	 */
+	public boolean moveNoErrorChecking(int originalRow, int originalColumn, int newRow, int newColumn) {
+		board[newRow][newColumn] = board[originalRow][originalColumn];
+		board[originalRow][originalColumn] = 0;
+		return true;
+	}
+	
 	/** Initializes the board for a new game
-	 * 
-	 *  @return
+	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
+	 *  Postcondition: the board has been initialized using the setup encoded in BoardMap
+	 *  @return whether or not the board was successfully initialized
 	 */
 	public boolean newGame() {
 		try {
+			// Read the board map
 			File boardMap = new File("BoardMap");
 			Scanner inFile = new Scanner(boardMap);
 			
@@ -188,6 +250,7 @@ public class Board {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("Failed setup!");
 			return false;
 		}
 	}
