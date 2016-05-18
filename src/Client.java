@@ -34,8 +34,6 @@ public class Client {
 	private int player;
 	private int currentTurn;
 	
-	private boolean isTimedOut = false;
-	
 	BoardDisplay boardWindow;
 	
 	/** Creates and sets up a new client
@@ -90,7 +88,6 @@ public class Client {
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
 		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		myWriter.flush();
-		System.out.println("Our Move: " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		return true;
 	}
 	
@@ -142,7 +139,7 @@ public class Client {
 			board.newGame();
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
-			currentTurn = 1;
+			currentTurn = 0;
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -155,16 +152,10 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
-			isTimedOut = false;
 			// Make and send move
-			int[] move;
-			//if (currentTurn <= 6)
-				move = opening();
-			//else
-				//move = Algorithm.makeMove(board, player);
-			if (!isTimedOut)
-				sendMove(move[0], move[1], move[2], move[3]);
-			
+			//int[] move = Algorithm.makeMove(board, player);
+			int[] move = opening();
+			sendMove(move[0], move[1], move[2], move[3]);
 			// Keep track of turns
 			currentTurn++;
 			System.out.println("Turn");
@@ -174,7 +165,7 @@ public class Client {
 			System.out.println("Invalid Move");
 		}
 		else if (messageType == SERVER_MOVE_TIMEOUT) {
-			isTimedOut = true;
+			// To do
 			System.out.println("Timeout");
 		}
 		else if (messageType == SERVER_WIN) {
@@ -219,6 +210,7 @@ public class Client {
 	 *  @return The move that should be taken as an integer array (from,to)
 	 */
 	public int[] opening() {
+		//Create an array to store the location of the piece(first two slots) and the target destination ( Next Two array slots)
 		int[] nextMove = new int[4];
 		if (player == 1) {
 			if (currentTurn == 1) {
@@ -227,9 +219,10 @@ public class Client {
 				nextMove[1] = 12;
 				nextMove[2] = 12;
 				nextMove[3] = 11;
+				// Return the move if it is valid
 				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
 					return nextMove;
-				// Send move
+	
 
 			} else if (currentTurn == 2) {
 				nextMove[0] = 15;
