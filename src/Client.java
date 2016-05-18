@@ -34,6 +34,8 @@ public class Client {
 	private int player;
 	private int currentTurn;
 	
+	private boolean isTimedOut = false;
+	
 	BoardDisplay boardWindow;
 	
 	/** Creates and sets up a new client
@@ -88,6 +90,7 @@ public class Client {
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
 		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		myWriter.flush();
+		System.out.println("Our Move: " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		return true;
 	}
 	
@@ -139,7 +142,7 @@ public class Client {
 			board.newGame();
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
-			currentTurn = 0;
+			currentTurn = 1;
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -152,10 +155,16 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
+			isTimedOut = false;
 			// Make and send move
-			//int[] move = Algorithm.makeMove(board, player);
-			int[] move = opening();
-			sendMove(move[0], move[1], move[2], move[3]);
+			int[] move;
+			//if (currentTurn <= 6)
+				move = opening();
+			//else
+				//move = Algorithm.makeMove(board, player);
+			if (!isTimedOut)
+				sendMove(move[0], move[1], move[2], move[3]);
+			
 			// Keep track of turns
 			currentTurn++;
 			System.out.println("Turn");
@@ -165,7 +174,7 @@ public class Client {
 			System.out.println("Invalid Move");
 		}
 		else if (messageType == SERVER_MOVE_TIMEOUT) {
-			// To do
+			isTimedOut = true;
 			System.out.println("Timeout");
 		}
 		else if (messageType == SERVER_WIN) {
