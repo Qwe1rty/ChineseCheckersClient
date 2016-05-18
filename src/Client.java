@@ -229,7 +229,7 @@ public class Client {
 				nextMove[1] = 12;
 				nextMove[2] = 12;
 				nextMove[3] = 11;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 				// Send move
 
@@ -238,28 +238,28 @@ public class Client {
 				nextMove[1] = 12;
 				nextMove[2] = 11;
 				nextMove[3] = 10;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 14;
 				nextMove[1] = 10;
 				nextMove[2] = 10;
 				nextMove[3] = 10;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 10;
 				nextMove[1] = 10;
 				nextMove[2] = 9;
 				nextMove[3] = 9;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 16;
 				nextMove[1] = 12;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			}
 
@@ -273,7 +273,7 @@ public class Client {
 				nextMove[1] = 9;
 				nextMove[2] = 1;
 				nextMove[3] = 12;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 				// Send move
 
@@ -282,28 +282,28 @@ public class Client {
 				nextMove[1] = 15;
 				nextMove[2] = 9;
 				nextMove[3] = 11;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 12;
 				nextMove[1] = 14;
 				nextMove[2] = 8;
 				nextMove[3] = 10;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 8;
 				nextMove[1] = 10;
 				nextMove[2] = 8;
 				nextMove[3] = 9;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 12;
 				nextMove[1] = 16;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 
 			}
@@ -319,7 +319,7 @@ public class Client {
 				nextMove[2] = 7;
 				nextMove[3] = 11;
 				// Send move
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 
 			} else if (currentTurn == 2) {
@@ -327,28 +327,28 @@ public class Client {
 				nextMove[1] = 12;
 				nextMove[2] = 7;
 				nextMove[3] = 1;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 4;
 				nextMove[1] = 10;
 				nextMove[2] = 10;
 				nextMove[3] = 10;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 4;
 				nextMove[1] = 10;
 				nextMove[2] = 8;
 				nextMove[3] = 10;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 12;
 				nextMove[1] = 16;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			}
 
@@ -360,7 +360,7 @@ public class Client {
 				nextMove[1] = 7;
 				nextMove[2] = 4;
 				nextMove[3] = 7;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 				// Send move
 
@@ -369,28 +369,28 @@ public class Client {
 				nextMove[1] = 5;
 				nextMove[2] = 5;
 				nextMove[3] = 7;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 2;
 				nextMove[1] = 4;
 				nextMove[2] = 6;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 6;
 				nextMove[1] = 8;
 				nextMove[2] = 7;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 0;
 				nextMove[1] = 4;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 
 			}
@@ -404,35 +404,35 @@ public class Client {
 				nextMove[2] = 5;
 				nextMove[3] = 4;
 				// Send move
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 2) {
 				nextMove[0] = 4;
 				nextMove[1] = 1;
 				nextMove[2] = 6;
 				nextMove[3] = 5;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 6;
 				nextMove[1] = 2;
 				nextMove[2] = 6;
 				nextMove[3] = 6;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 6;
 				nextMove[1] = 6;
 				nextMove[2] = 7;
 				nextMove[3] = 7;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 4;
 				nextMove[1] = 0;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 
 			}
@@ -446,35 +446,35 @@ public class Client {
 				nextMove[2] = 9;
 				nextMove[3] = 5;
 				// Send move
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 2) {
 				nextMove[0] = 11;
 				nextMove[1] = 4;
 				nextMove[2] = 9;
 				nextMove[3] = 6;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
 				nextMove[0] = 12;
 				nextMove[1] = 6;
 				nextMove[2] = 8;
 				nextMove[3] = 6;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 4) {
 				nextMove[0] = 8;
 				nextMove[1] = 6;
 				nextMove[2] = 8;
 				nextMove[3] = 7;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 5) {
 				nextMove[0] = 12;
 				nextMove[1] = 4;
 				nextMove[2] = 8;
 				nextMove[3] = 8;
-				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
+				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 
 			}
