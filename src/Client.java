@@ -34,6 +34,8 @@ public class Client {
 	private int player;
 	private int currentTurn;
 	
+	private boolean isTimedOut = false;
+	
 	BoardDisplay boardWindow;
 	
 	/** Creates and sets up a new client
@@ -88,6 +90,7 @@ public class Client {
 	public boolean sendMove(int originalRow, int originalColumn, int newRow, int newColumn) {
 		myWriter.println(CLIENT_MOVE + " " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		myWriter.flush();
+		System.out.println("Our Move: " + originalRow + " " + originalColumn + " " + newRow + " " + newColumn);
 		return true;
 	}
 	
@@ -128,8 +131,10 @@ public class Client {
 			int originalColumn = Integer.parseInt(message[2]);
 			int newRow = Integer.parseInt(message[3]);
 			int newColumn = Integer.parseInt(message[4]);
-			if(!board.move(originalRow, originalColumn, newRow, newColumn))
-				System.out.println("Invalid Move!");
+			//if(!board.move(originalRow, originalColumn, newRow, newColumn))
+			//	System.out.println("Invalid Move!");
+			// Assume the server will always return valid moves
+			board.moveNoErrorChecking(originalRow, originalColumn, newRow, newColumn);
 			boardWindow.refresh();
 			System.out.println("Move " + newRow + " " + newColumn);
 		}
@@ -139,7 +144,7 @@ public class Client {
 			board.newGame();
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
-			currentTurn = 0;
+			currentTurn = 1;
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -152,10 +157,16 @@ public class Client {
 			System.out.println("Place Piece");
 		}
 		else if (messageType == SERVER_TURN) {
+			isTimedOut = false;
 			// Make and send move
-			//int[] move = Algorithm.makeMove(board, player);
-			int[] move = opening();
-			sendMove(move[0], move[1], move[2], move[3]);
+			int[] move = null;
+			//if (currentTurn <= 5)
+				move = opening();
+			//if (move == null)
+				//move = Algorithm.makeMove(board, player);
+			if (!isTimedOut)
+				sendMove(move[0], move[1], move[2], move[3]);
+			
 			// Keep track of turns
 			currentTurn++;
 			System.out.println("Turn");
@@ -165,7 +176,7 @@ public class Client {
 			System.out.println("Invalid Move");
 		}
 		else if (messageType == SERVER_MOVE_TIMEOUT) {
-			// To do
+			isTimedOut = true;
 			System.out.println("Timeout");
 		}
 		else if (messageType == SERVER_WIN) {
@@ -210,7 +221,6 @@ public class Client {
 	 *  @return The move that should be taken as an integer array (from,to)
 	 */
 	public int[] opening() {
-		//Create an array to store the location of the piece(first two slots) and the target destination ( Next Two array slots)
 		int[] nextMove = new int[4];
 		if (player == 1) {
 			if (currentTurn == 1) {
@@ -219,10 +229,9 @@ public class Client {
 				nextMove[1] = 12;
 				nextMove[2] = 12;
 				nextMove[3] = 11;
-				// Return the move if it is valid
 				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[3], nextMove[4]))
 					return nextMove;
-	
+				// Send move
 
 			} else if (currentTurn == 2) {
 				nextMove[0] = 15;
