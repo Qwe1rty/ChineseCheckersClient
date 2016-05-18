@@ -326,7 +326,7 @@ public class Client {
 				nextMove[0] = 5;
 				nextMove[1] = 12;
 				nextMove[2] = 7;
-				nextMove[3] = 1;
+				nextMove[3] = 10;
 				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
 			} else if (currentTurn == 3) {
