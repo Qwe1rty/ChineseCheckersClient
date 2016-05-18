@@ -204,9 +204,10 @@ public class Client {
 		this.player = player;
 	}
 
-	/** Tries to play the first 5 moves if possible
-	 * Precondition it is before turn 5 and the moves are available
-	 * @return The move that should be taken as an integer array (from,to)
+	/** Author: Ray Luo 
+	 *  Tries to play the first 5 moves if possible
+	 *  Precondition it is before turn 5 and the moves are available
+	 *  @return The move that should be taken as an integer array (from,to)
 	 */
 	public int[] opening() {
 		int[] nextMove = new int[4];
