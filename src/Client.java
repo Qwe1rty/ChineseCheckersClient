@@ -33,6 +33,7 @@ public class Client {
 	private Board board;
 	private int player;
 	private int currentTurn;
+	private Algorithm algorithm;
 	
 	private boolean isTimedOut = false;
 	
@@ -145,6 +146,7 @@ public class Client {
 			boardWindow.refresh();
 			boardWindow.setPlayer(player);
 			currentTurn = 1;
+			algorithm = new Algorithm(player);
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -162,10 +164,9 @@ public class Client {
 			int[] move = null;
 			if (currentTurn <= 5)
 				move = opening();
-			//if (move == null)
-				//move = Algorithm.makeMove(board, player);
+			if (move == null)
+				move = algorithm.nextMove(board);
 			// Check if move was timed out
-			
 			try {
 				if (myReader.ready()){
 					String newInput = myReader.readLine();
