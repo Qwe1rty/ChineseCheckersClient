@@ -165,6 +165,7 @@ public class Client {
 			//if (move == null)
 				//move = Algorithm.makeMove(board, player);
 			// Check if move was timed out
+			
 			try {
 				if (myReader.ready()){
 					String newInput = myReader.readLine();
@@ -177,6 +178,9 @@ public class Client {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			System.out.println(isTimedOut);
+			System.out.println(move);
 			if (!isTimedOut && move != null)
 				sendMove(move[0], move[1], move[2], move[3]);
 			
@@ -282,9 +286,9 @@ public class Client {
 		else if (player == 2) {
 			if (currentTurn == 1) {
 				// y,x
-				nextMove[0] = 13;
-				nextMove[1] = 9;
-				nextMove[2] = 1;
+				nextMove[0] = 9;
+				nextMove[1] = 13;
+				nextMove[2] = 9;
 				nextMove[3] = 12;
 				if (board.isValidMove(nextMove[0], nextMove[1], nextMove[2], nextMove[3]))
 					return nextMove;
@@ -455,7 +459,7 @@ public class Client {
 			if (currentTurn == 1) {
 				// y,x
 				nextMove[0] = 9;
-				nextMove[1] = 3;
+				nextMove[1] = 4;
 				nextMove[2] = 9;
 				nextMove[3] = 5;
 				// Send move
