@@ -17,7 +17,7 @@ public class Algorithm {
 
 	// Target space that the algorithm tries to move pieces to
 	private int targetRow;
-	private int targetColumn;
+	private int targetCol;
 
 	// Color of our player; determines which direction pieces go to
 	private int color;
@@ -37,8 +37,11 @@ public class Algorithm {
 	public int[] nextMove(Board board) {
 
 		// Stores the length of the distance travelled
-		int[] bestMove = {0, 0, -100, -100};
-
+		int[] bestMove = null;
+		
+		// Calculates the target given the board position
+		findTarget(board);
+		
 		// Iterates through all pieces
 		for (int row = 0; row < 17; row++) {
 			for (int col = 0; col < 17; col++) {
@@ -48,8 +51,7 @@ public class Algorithm {
 
 					// Stores the current position in the first arraylist slot
 					ArrayList<Integer[]> moveList = new ArrayList<Integer[]>();
-					Integer[] currentPos = {row, col};
-					moveList.add(currentPos);
+					moveList.add(new Integer[] {row, col});
 
 					// DFS search
 					moveList = searchMoves(board, moveList, 1);
@@ -62,7 +64,7 @@ public class Algorithm {
 					move[3] = moveList.get(moveList.size() - 1)[1];
 
 					// If the move is the highest so far, save it 
-					if (findDistance(move) >= findDistance(bestMove))
+					if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
 						bestMove = move;
 				}
 
@@ -75,12 +77,38 @@ public class Algorithm {
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
 		if (depth > DEPTH) return moveList;
 
+		// Stores the current position
 		Integer[] currentPos = moveList.get(0);
+		
+		// Looks for all possible moves for the current position
 		ArrayList<Integer[]> possibleMoves = findMoves(board, currentPos);
 		
+		// Stores the best move found so far
+		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
+		
+		// Iterating through all possible moves
 		for (int i = 0; i < possibleMoves.size(); i++) {
 			
+			// Create new moveset with added potential move
+			// Also the shallow copy/deep copy thing is annoying
+			ArrayList<Integer[]> potentialMoves = new ArrayList<Integer[]>();
+			for (int j = 0; j < moveList.size(); j++)
+				potentialMoves.add(moveList.get(j));
+			potentialMoves.add(possibleMoves.get(i));
+			
+			// Update the board with new move
+			Board newBoard = new Board(board);
+			newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1]);
+//			
+			// Search tree for best move
+			ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
+			
+			// Checks if searched move is better than the current one
+			if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
+				bestMoves = bestSubMoves;
+				
 		}
+		
 
 		return moveList;
 	}
@@ -227,63 +255,146 @@ public class Algorithm {
 	}
 
 	// Finds the distance between two points
-	private int findDistance(int startRow, int startCol, int endRow, int endCol) {
-		return (endRow - startRow) * (endRow - startRow) + (endCol - startCol) * (endCol - startCol); 
+	private int distanceTravelledToTarget(int startRow, int startCol, int endRow, int endCol) {
+		int currentDistance = (targetRow - startRow) * (targetRow - startRow) + (targetCol - startCol) * (targetCol - startCol); 
+		int endDistance = (targetRow - endRow) * (targetRow - endRow) + (targetCol - endCol) * (targetCol - endCol);
+		return currentDistance - endDistance;
 	}
 	// Same as above but for an array with 4 intgers
-	private int findDistance(int[] places) {
-		return findDistance(places[0], places[1], places[2], places[3]); 
+	private int distanceTravelledToTarget(int[] places) {
+		return distanceTravelledToTarget(places[0], places[1], places[2], places[3]); 
 	}
 	// Same as above but for an arraylist of integer arrays
-	private int findDistance(ArrayList<Integer[]> moveList) {
-		return findDistance(moveList.get(0)[0], moveList.get(0)[1], 
+	private int distanceTravelledToTarget(ArrayList<Integer[]> moveList) {
+		return distanceTravelledToTarget(moveList.get(0)[0], moveList.get(0)[1], 
 				moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1]);
 	}
 
 	// Locates the farthest point to target depending on 
-	private void findTarget(int[][] board) {
-		// Colors 3 (yellow) and 6 (purple) are hardcoded because the coordinate system
-		// doesn't really allow for any decent way of searching for farthest position
+	private void findTarget(Board board) {
+		
 		if (color == 1) { //  Red, bottom
 			for (int row = 0; row < 17; row++) {
 				for (int col = 0; col < 17; col++) {
-					if (board[row][col] == 0) {
+					if (board.getBoard()[row][col] == 0) {
 						targetRow = row;
-						targetColumn = col;
+						targetCol = col;
+						return;
 					}
 				}
 			}
+			targetRow = Integer.MAX_VALUE;
+			targetCol = Integer.MAX_VALUE;
+			
 		} else if (color == 2) { // Orange, bottom left
 			for (int col = 0; col < 17; col++) {
 				for (int row = 0; row < 17; row++) {
-					if (board[row][col] == 0) {
+					if (board.getBoard()[row][col] == 0) {
 						targetRow = row;
-						targetColumn = col;
+						targetCol = col;
+						return;
 					}
 				}
 			}
+			targetRow = Integer.MAX_VALUE;
+			targetCol = Integer.MAX_VALUE;
+			
 		} else if (color == 3) { // Yellow, top right
-
+			if (board.getBoard()[12][4] == 0) {
+				targetRow = 12;
+				targetCol = 4;
+				return;
+			}
+			for (int row = 11; row < 13; row++) {
+				for (int col = 4; col < 6; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			for (int row = 10; row < 13; row++) {
+				for (int col = 4; col < 7; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			for (int row = 9; row < 13; row++) {
+				for (int col = 4; col < 8; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			targetRow = Integer.MAX_VALUE;
+			targetCol = Integer.MAX_VALUE;
+			
 		} else if (color == 4) { // Green, top
 			for (int row = 16; row >= 0; row--) {
 				for (int col = 0; col < 17; col++) {
-					if (board[row][col] == 0) {
+					if (board.getBoard()[row][col] == 0) {
 						targetRow = row;
-						targetColumn = col;
+						targetCol = col;
+						return;
 					}
 				}
 			}
+			
 		} else if (color == 5) { // Blue, top left
 			for (int col = 16; col >= 0; col--) {
 				for (int row = 0; row < 17; row++) {
-					if (board[row][col] == 0) {
+					if (board.getBoard()[row][col] == 0) {
 						targetRow = row;
-						targetColumn = col;
+						targetCol = col;
+						return;
 					}
 				}
 			}
+			targetRow = Integer.MAX_VALUE;
+			targetCol = Integer.MAX_VALUE;
+			
 		} else if (color == 6) { // Purple, bottom left
-
+			if (board.getBoard()[4][12] == 0) {
+				targetRow = 4;
+				targetCol = 12;
+				return;
+			} 
+			for (int row = 4; row < 6; row++) {
+				for (int col = 11; col < 13; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			for (int row = 4; row < 7; row++) {
+				for (int col = 10; col < 13; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			for (int row = 4; row < 8; row++) {
+				for (int col = 9; col < 13; col++) {
+					if (board.getBoard()[row][col] == 0) {
+						targetRow = row;
+						targetCol = col;
+						return;
+					}
+				}
+			}
+			targetRow = Integer.MAX_VALUE;
+			targetCol = Integer.MAX_VALUE;
+			
 		} else System.out.println("you dun goofed, son");
 	}
 

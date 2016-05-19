@@ -33,6 +33,13 @@ public class Board {
 		board = new int[NUM_ROWS][NUM_COLUMNS];
 		newGame();
 	}
+	/**
+	 * A clone constructor that creates a new board with a preexisting board state
+	 * @param board a preexisting board to copy
+	 */
+	public Board(Board board) {
+		this.board = board.getBoard();
+	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
 	 *  Precondition: row1, column1, row2, and column2 are valid integers that correspond to two points
