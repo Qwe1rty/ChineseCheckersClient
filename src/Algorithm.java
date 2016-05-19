@@ -64,7 +64,7 @@ public class Algorithm {
 					move[3] = moveList.get(moveList.size() - 1)[1];
 
 					// If the move is the highest so far, save it 
-					if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
+					if (bestMove == null || distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
 						bestMove = move;
 				}
 
