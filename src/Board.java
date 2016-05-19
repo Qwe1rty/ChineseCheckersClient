@@ -146,7 +146,7 @@ public class Board {
 			if (direction != DIRECTION_NORTH && direction != DIRECTION_SOUTH) {
 				// Check if there's a piece to jump over in that direction
 				Point otherSpot = getAdjacent(originalRow, originalColumn, direction);
-				if (board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
+				if (isValidPoint(otherSpot) && board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
 					Point jumpSpot = getAdjacent(otherSpot, direction);
 					// Check if that spot beyond the piece is where you want to go, or if it's possible to jump to 
 					//the spot you want to go from that spot

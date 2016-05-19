@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Client {
 	
-	public static final int SERVER_PORT = 420;
+	public static final int SERVER_PORT = 421;
 	
 	public static final int SERVER_MOVE = 1;
 	public static final int SERVER_NEW_GAME = 2;
@@ -160,11 +160,24 @@ public class Client {
 			isTimedOut = false;
 			// Make and send move
 			int[] move = null;
-			//if (currentTurn <= 5)
+			if (currentTurn <= 5)
 				move = opening();
 			//if (move == null)
 				//move = Algorithm.makeMove(board, player);
-			if (!isTimedOut)
+			// Check if move was timed out
+			try {
+				if (myReader.ready()){
+					String newInput = myReader.readLine();
+					System.out.println(input);
+					String[] newMessage = newInput.split(" ");
+					if (Integer.parseInt(newMessage[0]) == SERVER_MOVE_TIMEOUT)
+						isTimedOut = true;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (!isTimedOut && move != null)
 				sendMove(move[0], move[1], move[2], move[3]);
 			
 			// Keep track of turns
