@@ -85,7 +85,7 @@ public class Algorithm {
 		if (depth > DEPTH) return moveList;
 
 		// Looks for all possible moves for the current position
-		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1));
+		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
 		
 		// Stores the best move found so far
 		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
@@ -104,8 +104,11 @@ public class Algorithm {
 			Board newBoard = new Board(board);
 			
 			// If the move is valid (sometimes it might not be)
+			// Also updates the board positions with the new move
 			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
 
+				//if ()
+				
 				// Search tree for best move
 				ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
 
@@ -121,7 +124,7 @@ public class Algorithm {
 	}
 
 	// Finds all possible moves given a piece's position
-	private ArrayList<Integer[]> findMoves(Board board, Integer[] currentPos) {
+	private ArrayList<Integer[]> findMoves(Board board, Integer[] currentPos, int depth) {
 
 		// Variable initialization
 		ArrayList<Integer[]> movelist = new ArrayList<Integer[]>();
@@ -130,79 +133,79 @@ public class Algorithm {
 		// If it's the midgame, only check moves that move towards target
 		if (!isEndgame) { 
 			if (color == 1) { // Red, bottom
-				temp = findWest(board, currentPos);
+				temp = findWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos);
+				temp = findNorthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos);
+				temp = findNorthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos);
+				temp = findEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			} else if (color == 2) {
-				temp = findSouthWest(board, currentPos);
+				temp = findSouthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos);
+				temp = findWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos);
+				temp = findNorthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos);
+				temp = findNorthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			} else if (color == 3) {
-				temp = findSouthEast(board, currentPos);
+				temp = findSouthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos);
+				temp = findSouthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos);
+				temp = findWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos);
+				temp = findNorthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			} else if (color == 4) {
-				temp = findEast(board, currentPos);
+				temp = findEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos);
+				temp = findSouthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos);
+				temp = findSouthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos);
+				temp = findWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			} else if (color == 5) {
-				temp = findNorthEast(board, currentPos);
+				temp = findNorthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos);
+				temp = findEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos);
+				temp = findSouthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos);
+				temp = findSouthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			} else if (color == 6) {
-				temp = findNorthWest(board, currentPos);
+				temp = findNorthWest(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos);
+				temp = findNorthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos);
+				temp = findEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos);
+				temp = findSouthEast(board, currentPos, depth);
 				if (temp != null) movelist.add(temp);
 			}
 		} else { // Check ALL moves, including ones that move backwards
-			temp = findWest(board, currentPos);
+			temp = findWest(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
-			temp = findNorthWest(board, currentPos);
+			temp = findNorthWest(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
-			temp = findNorthEast(board, currentPos);
+			temp = findNorthEast(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
-			temp = findEast(board, currentPos);
+			temp = findEast(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
-			temp = findSouthEast(board, currentPos);
+			temp = findSouthEast(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
-			temp = findSouthWest(board, currentPos);
+			temp = findSouthWest(board, currentPos, depth);
 			if (temp != null) movelist.add(temp);
 		}
 		return movelist;
 	}
-	private Integer[] findWest(Board board, Integer[] currentPos) {
+	private Integer[] findWest(Board board, Integer[] currentPos, int depth) {
 		try { // W
-			if (board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0) 
 				return new Integer[] {currentPos[0], currentPos[1] - 1};
 			else if (board.getBoard()[currentPos[0]][currentPos[1] - 1] != -1
 					&& board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0)
@@ -210,9 +213,9 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	private Integer[] findNorthWest(Board board, Integer[] currentPos) {
+	private Integer[] findNorthWest(Board board, Integer[] currentPos, int depth) {
 		try { // NW
-			if (board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] == 0) 
 				return new Integer[] {currentPos[0] - 1, currentPos[1] - 1};
 			else if (board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] != -1
 					&& board.getBoard()[currentPos[0] - 2][currentPos[1] - 2] == 0)
@@ -220,9 +223,9 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	private Integer[] findNorthEast(Board board, Integer[] currentPos) {
+	private Integer[] findNorthEast(Board board, Integer[] currentPos, int depth) {
 		try { // NE
-			if (board.getBoard()[currentPos[0] - 1][currentPos[1]] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1]] == 0) 
 				return new Integer[] {currentPos[0] - 1, currentPos[1]};
 			else if (board.getBoard()[currentPos[0] - 1][currentPos[1]] != -1
 					&& board.getBoard()[currentPos[0] - 2][currentPos[1]] == 0)
@@ -230,9 +233,9 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	private Integer[] findEast(Board board, Integer[] currentPos) {
+	private Integer[] findEast(Board board, Integer[] currentPos, int depth) {
 		try { // E
-			if (board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0) 
 				return new Integer[] {currentPos[0], currentPos[1] + 1};
 			else if (board.getBoard()[currentPos[0]][currentPos[1] + 1] != -1
 					&& board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0)
@@ -240,9 +243,9 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	private Integer[] findSouthEast(Board board, Integer[] currentPos) {
+	private Integer[] findSouthEast(Board board, Integer[] currentPos, int depth) {
 		try { // SE
-			if (board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] == 0) 
 				return new Integer[] {currentPos[0] + 1, currentPos[1] + 1};
 			else if (board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] != -1
 					&& board.getBoard()[currentPos[0] + 2][currentPos[1] + 2] == 0)
@@ -250,9 +253,9 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	private Integer[] findSouthWest(Board board, Integer[] currentPos) {
+	private Integer[] findSouthWest(Board board, Integer[] currentPos, int depth) {
 		try { // SW
-			if (board.getBoard()[currentPos[0] + 1][currentPos[1]] == 0) 
+			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1]] == 0) 
 				return new Integer[] {currentPos[0] + 1, currentPos[1]};
 			else if (board.getBoard()[currentPos[0] + 1][currentPos[1]] != -1
 					&& board.getBoard()[currentPos[0] + 2][currentPos[1]] == 0)
