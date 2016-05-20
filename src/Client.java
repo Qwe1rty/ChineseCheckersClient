@@ -163,7 +163,7 @@ public class Client {
 			// Make and send move
 			int[] move = null;
 			if (currentTurn <= 5)
-				move = opening();
+				move = opening(player, currentTurn, board);
 			if (move == null)
 				move = algorithm.nextMove(board);
 			// Check if move was timed out
@@ -238,7 +238,7 @@ public class Client {
 	 *  Precondition it is before turn 5 and the moves are available
 	 *  @return The move that should be taken as an integer array (from,to)
 	 */
-	public int[] opening() {
+	public static int[] opening(int player, int currentTurn, Board board) {
 		int[] nextMove = new int[4];
 		if (player == 1) {
 			if (currentTurn == 1) {
@@ -496,11 +496,10 @@ public class Client {
 					return nextMove;
 
 			}
-
-			 
+	 
 		}
 		return null;
-	}	
+	}
 	
 	public static void main(String[] args) {
 		// Create the client and go

@@ -285,25 +285,29 @@ public class Board {
 		}
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(500);
 		}
 		catch (Exception e) {
 			
 		}
 		
+		int currentTurn = 1;
 		while(true) {
-			for (int player = 0; player < 6; player++) {
-				int[] move = algorithms[player].nextMove(newBoard);
+			for (int player = 1; player <= 6; player++) {
+				int[] move = Client.opening(player, currentTurn, newBoard);
+				if (move == null)
+					move = algorithms[player].nextMove(newBoard);
 				System.out.println(Arrays.toString(move));
 				System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
 				window.refresh();
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(500);
 				}
 				catch (Exception e) {
 					
 				}
 			}
+			currentTurn++;
 		}
 		
 		//window.declareWinner(6,5);
