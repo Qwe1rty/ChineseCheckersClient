@@ -298,7 +298,8 @@ public class Board {
 				if (move == null)
 					move = algorithms[player].nextMove(newBoard);
 				System.out.println(Arrays.toString(move));
-				System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+				if (move != null)
+					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
 				window.refresh();
 				try {
 					Thread.sleep(500);
@@ -310,7 +311,7 @@ public class Board {
 			currentTurn++;
 		}
 		
-		//window.declareWinner(6,5);
+		
 	}
 
 }
