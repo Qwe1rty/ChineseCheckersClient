@@ -1,6 +1,7 @@
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /** The Board Class
@@ -38,7 +39,9 @@ public class Board {
 	 * @param board a preexisting board to copy
 	 */
 	public Board(Board board) {
-		this.board = board.getBoard();
+		this.board = new int[NUM_ROWS][NUM_COLUMNS];
+		for (int row = 0; row < NUM_ROWS; row++)
+			this.board[row] = Arrays.copyOf(board.getBoard()[row], board.getBoard()[row].length);
 	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
@@ -270,8 +273,39 @@ public class Board {
 	}
 	
 	public static void main (String[] args) {
+		// Board testing code
+		
 		Board newBoard = new Board();
 		BoardDisplay window = new BoardDisplay(newBoard.board);
+		
+		// Testing
+		Algorithm[] algorithms = new Algorithm[6];
+		for (int player = 0; player < 6; player++) {
+			algorithms[player] = new Algorithm(player + 1);
+		}
+
+		try {
+			Thread.sleep(2000);
+		}
+		catch (Exception e) {
+			
+		}
+		
+		while(true) {
+			for (int player = 0; player < 6; player++) {
+				int[] move = algorithms[player].nextMove(newBoard);
+				System.out.println(Arrays.toString(move));
+				System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+				window.refresh();
+				try {
+					Thread.sleep(2000);
+				}
+				catch (Exception e) {
+					
+				}
+			}
+		}
+		
 		//window.declareWinner(6,5);
 	}
 
