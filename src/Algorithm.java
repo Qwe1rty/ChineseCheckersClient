@@ -70,6 +70,7 @@ public class Algorithm {
 						if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove) || bestMove == null)
 							bestMove = move;
 					}
+
 				}
 
 			}
