@@ -67,7 +67,7 @@ public class Algorithm {
 						move[3] = moveList.get(moveList.size() - 1)[1];
 	
 						// If the move is the highest so far, save it 
-						if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove) || bestMove == null)
+						if (bestMove == null || distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
 							bestMove = move;
 					}
 
@@ -80,13 +80,12 @@ public class Algorithm {
 
 	// Recursively searches through the board for the move that covers the most distance
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
+		
+		// If at final depth level, return watchu' got
 		if (depth > DEPTH) return moveList;
 
-		// Stores the current position
-		Integer[] currentPos = moveList.get(0);
-		
 		// Looks for all possible moves for the current position
-		ArrayList<Integer[]> possibleMoves = findMoves(board, currentPos);
+		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(0));
 		
 		// Stores the best move found so far
 		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
@@ -103,18 +102,22 @@ public class Algorithm {
 			
 			// Update the board with new move
 			Board newBoard = new Board(board);
-			newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1]);
-//			
-			// Search tree for best move
-			ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
 			
-			// Checks if searched move is better than the current one
-			if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
-				bestMoves = bestSubMoves;
+			// If the move is valid (sometimes it might not be)
+			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
+
+				// Search tree for best move
+				ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
+
+				// Checks if searched move is better than the current one
+				if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
+					bestMoves = bestSubMoves;
+			
+			}
 				
 		}
 
-		return moveList;
+		return bestMoves;
 	}
 
 	// Finds all possible moves given a piece's position
@@ -219,11 +222,11 @@ public class Algorithm {
 	}
 	private Integer[] findNorthEast(Board board, Integer[] currentPos) {
 		try { // NE
-			if (board.getBoard()[currentPos[0] - 1][currentPos[1] + 1] == 0) 
-				return new Integer[] {currentPos[0] - 1, currentPos[1] + 1};
-			else if (board.getBoard()[currentPos[0] - 1][currentPos[1] + 1] != -1
-					&& board.getBoard()[currentPos[0] - 2][currentPos[1] + 2] == 0)
-				return new Integer[] {currentPos[0] - 2, currentPos[1] + 2};
+			if (board.getBoard()[currentPos[0] - 1][currentPos[1]] == 0) 
+				return new Integer[] {currentPos[0] - 1, currentPos[1]};
+			else if (board.getBoard()[currentPos[0] - 1][currentPos[1]] != -1
+					&& board.getBoard()[currentPos[0] - 2][currentPos[1]] == 0)
+				return new Integer[] {currentPos[0] - 2, currentPos[1]};
 			else return null;
 		} catch (Exception e) {return null;}
 	}
@@ -249,11 +252,11 @@ public class Algorithm {
 	}
 	private Integer[] findSouthWest(Board board, Integer[] currentPos) {
 		try { // SW
-			if (board.getBoard()[currentPos[0] + 1][currentPos[1] - 1] == 0) 
-				return new Integer[] {currentPos[0] + 1, currentPos[1] - 1};
-			else if (board.getBoard()[currentPos[0] + 1][currentPos[1] - 1] != -1
-					&& board.getBoard()[currentPos[0] + 2][currentPos[1] - 2] == 0)
-				return new Integer[] {currentPos[0] + 2, currentPos[1] - 2};
+			if (board.getBoard()[currentPos[0] + 1][currentPos[1]] == 0) 
+				return new Integer[] {currentPos[0] + 1, currentPos[1]};
+			else if (board.getBoard()[currentPos[0] + 1][currentPos[1]] != -1
+					&& board.getBoard()[currentPos[0] + 2][currentPos[1]] == 0)
+				return new Integer[] {currentPos[0] + 2, currentPos[1]};
 			else return null;
 		} catch (Exception e) {return null;}
 	}
