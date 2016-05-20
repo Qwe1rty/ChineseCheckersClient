@@ -38,7 +38,7 @@ public class Board {
 	 * @param board a preexisting board to copy
 	 */
 	public Board(Board board) {
-		this.board = board.getBoard();
+		this.board = new int[NUM_ROWS][NUM_COLUMNS];
 	}
 	
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in

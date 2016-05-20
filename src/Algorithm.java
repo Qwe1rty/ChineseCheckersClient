@@ -55,17 +55,21 @@ public class Algorithm {
 
 					// DFS search
 					moveList = searchMoves(board, moveList, 1);
+					
+					// If the movelist actually have a move
+					if (moveList.size() > 0) {
 
-					// Stores current position and final position
-					int[] move = new int[4];
-					move[0] = moveList.get(0)[0];
-					move[1] = moveList.get(0)[1];
-					move[2] = moveList.get(moveList.size() - 1)[0];
-					move[3] = moveList.get(moveList.size() - 1)[1];
-
-					// If the move is the highest so far, save it 
-					if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
-						bestMove = move;
+						// Stores current position and final position
+						int[] move = new int[4];
+						move[0] = moveList.get(0)[0];
+						move[1] = moveList.get(0)[1];
+						move[2] = moveList.get(moveList.size() - 1)[0];
+						move[3] = moveList.get(moveList.size() - 1)[1];
+	
+						// If the move is the highest so far, save it 
+						if (distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove) || bestMove == null)
+							bestMove = move;
+					}
 				}
 
 			}
@@ -108,7 +112,6 @@ public class Algorithm {
 				bestMoves = bestSubMoves;
 				
 		}
-		
 
 		return moveList;
 	}
