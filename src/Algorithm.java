@@ -10,7 +10,7 @@ public class Algorithm {
 
 	// tinyurl.com/chinesecheckersprotocol
 
-	private final static int DEPTH = 1; // Please dont make this less than 1
+	private final static int DEPTH = 2; // Please dont make this less than 1
 
 	// If true, we include moves that move backwards
 	private boolean isEndgame;
@@ -85,7 +85,7 @@ public class Algorithm {
 		if (depth > DEPTH) return moveList;
 
 		// Looks for all possible moves for the current position
-		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(0));
+		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1));
 		
 		// Stores the best move found so far
 		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
@@ -273,8 +273,10 @@ public class Algorithm {
 	}
 	// Same as above but for an arraylist of integer arrays
 	private int distanceTravelledToTarget(ArrayList<Integer[]> moveList) {
-		return distanceTravelledToTarget(moveList.get(0)[0], moveList.get(0)[1], 
-				moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1]);
+		if (moveList.size() > 0) {
+			return distanceTravelledToTarget(moveList.get(0)[0], moveList.get(0)[1], 
+					moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1]);
+		} else return Integer.MIN_VALUE;
 	}
 
 	// Locates the farthest point to target depending on 

@@ -296,13 +296,13 @@ public class Board {
 			for (int player = 1; player <= 6; player++) {
 				int[] move = Client.opening(player, currentTurn, newBoard);
 				if (move == null)
-					move = algorithms[player].nextMove(newBoard);
+					move = algorithms[player - 1].nextMove(newBoard);
 				System.out.println(Arrays.toString(move));
 				if (move != null)
 					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
 				window.refresh();
 				try {
-					Thread.sleep(500);
+					Thread.sleep(50);
 				}
 				catch (Exception e) {
 					
