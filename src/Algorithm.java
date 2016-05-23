@@ -10,14 +10,18 @@ public class Algorithm {
 
 	// tinyurl.com/chinesecheckersprotocol
 
-	private final static int DEPTH = 2; // Please dont make this less than 1
+	private final static int DEPTH = 20; // Please dont make this less than 1
 
 	// If true, we include moves that move backwards
-	private boolean isEndgame;
+	// Be aware that if true, then hitting the max depth level is guaranteed
+	// given there is an available jump in the first move
+	private boolean isEndgame = true;
 
-	// Target space that the algorithm tries to move pieces to
-	private int targetRow;
-	private int targetCol;
+	// Stores all pieces that have reached their final destinations
+	private ArrayList<Integer[]> settledPieces;
+
+	// Target spaces that the algorithm tries to move pieces to
+	private ArrayList<Integer[]> targetPlaces; 
 
 	// Color of our player; determines which direction pieces go to
 	private int color;
@@ -33,15 +37,17 @@ public class Algorithm {
 		else this.color = color;
 	}
 
-
 	public int[] nextMove(Board board) {
 
 		// Stores the length of the distance travelled
 		int[] bestMove = null;
-		
+
 		// Calculates the target given the board position
-		findTarget(board);
-		
+		findTargets(board);
+
+		// Checks if the gamestate is in endgame
+		if (!isEndgame && isEndgame()) isEndgame = true;
+
 		// Iterates through all pieces
 		for (int row = 0; row < 17; row++) {
 			for (int col = 0; col < 17; col++) {
@@ -49,77 +55,101 @@ public class Algorithm {
 				// If it finds a piece that is yours
 				if (board.getBoard()[row][col] == color) {
 
-					// Stores the current position in the first arraylist slot
-					ArrayList<Integer[]> moveList = new ArrayList<Integer[]>();
-					moveList.add(new Integer[] {row, col});
-
-					// DFS search
-					moveList = searchMoves(board, moveList, 1);
-					
-					// If the movelist actually have a move
-					if (moveList.size() > 0) {
-
-						// Stores current position and final position
-						int[] move = new int[4];
-						move[0] = moveList.get(0)[0];
-						move[1] = moveList.get(0)[1];
-						move[2] = moveList.get(moveList.size() - 1)[0];
-						move[3] = moveList.get(moveList.size() - 1)[1];
-	
-						// If the move is the highest so far, save it 
-						if (bestMove == null || distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
-							bestMove = move;
+					// Checks to see if the piece is in final place
+					boolean pieceSettled = false;
+					for (int i = 0; i < settledPieces.size(); i++) {
+						if (row == settledPieces.get(i)[0] && col == settledPieces.get(i)[1]) {
+							pieceSettled = true;
+							break;
+						}
 					}
 
-				}
+					// If the piece isn't settled yet
+					if (!pieceSettled) {
 
+						// Stores the current position in the first arraylist slot
+						ArrayList<Integer[]> moveList = new ArrayList<Integer[]>();
+						moveList.add(new Integer[] {row, col});
+
+						// DFS search
+						moveList = searchMoves(board, moveList, 1);
+
+						// If the movelist actually have a move
+						if (moveList.size() > 0) {
+
+							// Stores current position and final position
+							int[] move = new int[4];
+							move[0] = moveList.get(0)[0];
+							move[1] = moveList.get(0)[1];
+							move[2] = moveList.get(moveList.size() - 1)[0];
+							move[3] = moveList.get(moveList.size() - 1)[1];
+
+							// If the move is the highest so far, save it 
+							if (bestMove == null || distanceTravelledToTarget(move) >= distanceTravelledToTarget(bestMove))
+								bestMove = move;
+						}
+					}
+				}
 			}
 		}
+
+		// If there aren't any available moves, ACTIVATE LE ENDGAME
+		if (bestMove == null && !isEndgame) {
+			isEndgame = true;
+			bestMove = nextMove(board);
+
+		} else if (bestMove == null && isEndgame) // If endgame's already enabled, then there's no moves available
+			return bestMove;
+
 		return bestMove;
 	}
 
 	// Recursively searches through the board for the move that covers the most distance
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
-		
+
 		// If at final depth level, return watchu' got
 		if (depth > DEPTH) return moveList;
 
 		// Looks for all possible moves for the current position
 		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
-		
+
 		// Stores the best move found so far
 		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
-		
+
 		// Iterating through all possible moves
 		for (int i = 0; i < possibleMoves.size(); i++) {
-			
+
 			// Create new moveset with added potential move
 			// Also the shallow copy/deep copy thing is annoying
 			ArrayList<Integer[]> potentialMoves = new ArrayList<Integer[]>();
 			for (int j = 0; j < moveList.size(); j++)
 				potentialMoves.add(moveList.get(j));
 			potentialMoves.add(possibleMoves.get(i));
-			
+
 			// Update the board with new move
 			Board newBoard = new Board(board);
-			
+
 			// If the move is valid (sometimes it might not be)
 			// Also updates the board positions with the new move
 			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
 
-				//if ()
-				
-				// Search tree for best move
-				ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
+				// If the first move is a jump and not a walk, search for all further moves
+				if (depth == 1 && isJump(potentialMoves)) {
 
-				// Checks if searched move is better than the current one
-				if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
-					bestMoves = bestSubMoves;
-			
+					// Search tree for best move
+					ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
+
+					// Checks if searched move is better than the current one
+					if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
+						bestMoves = bestSubMoves;
+
+				} else if (bestMoves.size() == 0 || distanceTravelledToTarget(potentialMoves) > distanceTravelledToTarget(bestMoves)) {
+					
+					// If it's a walk, just check the walk distance
+					bestMoves = potentialMoves; 
+				}
 			}
-				
 		}
-
 		return bestMoves;
 	}
 
@@ -129,7 +159,7 @@ public class Algorithm {
 		// Variable initialization
 		ArrayList<Integer[]> movelist = new ArrayList<Integer[]>();
 		Integer[] temp;
-		
+
 		// If it's the midgame, only check moves that move towards target
 		if (!isEndgame) { 
 			if (color == 1) { // Red, bottom
@@ -266,11 +296,21 @@ public class Algorithm {
 
 	// Finds the distance between two points
 	private int distanceTravelledToTarget(int startRow, int startCol, int endRow, int endCol) {
-		int currentDistance = (targetRow - startRow) * (targetRow - startRow) + (targetCol - startCol) * (targetCol - startCol); 
-		int endDistance = (targetRow - endRow) * (targetRow - endRow) + (targetCol - endCol) * (targetCol - endCol);
-		return currentDistance - endDistance;
+		int currentDistance = Integer.MAX_VALUE, endDistance = Integer.MAX_VALUE;
+		for (int i = 0; i < targetPlaces.size(); i++) {
+			int j = (targetPlaces.get(i)[0] - startRow) * (targetPlaces.get(i)[0] - startRow) +
+					(targetPlaces.get(i)[1] - startCol) * (targetPlaces.get(i)[1] - startCol);
+			if (j < currentDistance) currentDistance = j;
+		}
+		for (int i = 0; i < targetPlaces.size(); i++) {
+			int j = (targetPlaces.get(i)[0] - endRow) * (targetPlaces.get(i)[0] - endRow) +
+					(targetPlaces.get(i)[1] - endCol) * (targetPlaces.get(i)[1] - endCol);
+			if (j < endDistance) endDistance = j;
+		}
+		if (currentDistance == Integer.MAX_VALUE || endDistance == Integer.MAX_VALUE) return Integer.MIN_VALUE;
+		else return currentDistance - endDistance;
 	}
-	// Same as above but for an array with 4 intgers
+	// Same as above but for an array with 4 integers
 	private int distanceTravelledToTarget(int[] places) {
 		return distanceTravelledToTarget(places[0], places[1], places[2], places[3]); 
 	}
@@ -282,131 +322,174 @@ public class Algorithm {
 		} else return Integer.MIN_VALUE;
 	}
 
-	// Locates the farthest point to target depending on 
-	private void findTarget(Board board) {
-		
+	// Determines if the most recent move is a jump
+	private boolean isJump(ArrayList<Integer[]> moveList) {
+		Integer[] currentMove = moveList.get(moveList.size() - 1);
+		Integer[] lastMove = moveList.get(moveList.size() - 2);
+		return ((int) Math.abs(currentMove[0] - lastMove[0]) > 1) || ((int) Math.abs(currentMove[1] - lastMove[1]) > 1); 
+	}
+
+	// Determines if the state of the game is in its endgame
+	private boolean isEndgame() {
+		return settledPieces.size() > 0;
+	}
+
+	// Locates the farthest row that needs to be filled
+	private void findTargets(Board board) {
+
+		// Initializashuns!
+		targetPlaces = new ArrayList<Integer[]>();
+		settledPieces = new ArrayList<Integer[]>();
+		boolean lastRowFull = true;
+
 		if (color == 1) { //  Red, bottom
 			for (int row = 0; row < 17; row++) {
-				for (int col = 0; col < 17; col++) {
-					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+				if (lastRowFull) {
+					for (int col = 0; col < 17; col++) {
+						if (board.getBoard()[row][col] == 0) {
+							lastRowFull = false;
+							targetPlaces.add(new Integer[] {row, col});
+						} else if (board.getBoard()[row][col] != -1) {
+							settledPieces.add(new Integer[] {row, col});
+						}
 					}
-				}
+				} else return;
 			}
-			targetRow = Integer.MAX_VALUE;
-			targetCol = Integer.MAX_VALUE;
-			
+
 		} else if (color == 2) { // Orange, bottom left
 			for (int col = 0; col < 17; col++) {
-				for (int row = 0; row < 17; row++) {
-					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+				if (lastRowFull) {
+					for (int row = 0; row < 17; row++) {
+						if (board.getBoard()[row][col] == 0) {
+							lastRowFull = false;
+							targetPlaces.add(new Integer[] {row, col});
+						} else if (board.getBoard()[row][col] != -1) {
+							settledPieces.add(new Integer[] {row, col});
+						}
 					}
-				}
+				} else return;
 			}
-			targetRow = Integer.MAX_VALUE;
-			targetCol = Integer.MAX_VALUE;
-			
+
 		} else if (color == 3) { // Yellow, top right
 			if (board.getBoard()[12][4] == 0) {
-				targetRow = 12;
-				targetCol = 4;
-				return;
-			}
-			for (int row = 11; row < 13; row++) {
-				for (int col = 4; col < 6; col++) {
+				targetPlaces.add(new Integer[] {12, 4});
+				lastRowFull = false;
+			} else settledPieces.add(new Integer[] {12, 4});
+
+			if (lastRowFull) {
+				int row = 11, col = 4;
+				while (row < 13 && col < 6) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			for (int row = 10; row < 13; row++) {
-				for (int col = 4; col < 7; col++) {
+			if (lastRowFull) {
+				int row = 10, col = 4;
+				while (row < 13 && col < 7) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			for (int row = 9; row < 13; row++) {
-				for (int col = 4; col < 8; col++) {
+			if (lastRowFull) {
+				int row = 9, col = 4;
+				while (row < 13 && col < 8) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			targetRow = Integer.MAX_VALUE;
-			targetCol = Integer.MAX_VALUE;
-			
+
 		} else if (color == 4) { // Green, top
 			for (int row = 16; row >= 0; row--) {
-				for (int col = 0; col < 17; col++) {
-					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+				if (lastRowFull) {
+					for (int col = 0; col < 17; col++) {
+						if (board.getBoard()[row][col] == 0) {
+							lastRowFull = false;
+							targetPlaces.add(new Integer[] {row, col});
+						} else if (board.getBoard()[row][col] != -1) {
+							settledPieces.add(new Integer[] {row, col});
+						}
 					}
-				}
+				} else return;
 			}
-			
+
 		} else if (color == 5) { // Blue, top left
 			for (int col = 16; col >= 0; col--) {
-				for (int row = 0; row < 17; row++) {
-					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+				if (lastRowFull) {
+					for (int row = 0; row < 17; row++) {
+						if (board.getBoard()[row][col] == 0) {
+							lastRowFull = false;
+							targetPlaces.add(new Integer[] {row, col});
+						} else if (board.getBoard()[row][col] != -1) {
+							settledPieces.add(new Integer[] {row, col});
+						}
 					}
-				}
+				} else return;
 			}
-			targetRow = Integer.MAX_VALUE;
-			targetCol = Integer.MAX_VALUE;
-			
+
 		} else if (color == 6) { // Purple, bottom left
 			if (board.getBoard()[4][12] == 0) {
-				targetRow = 4;
-				targetCol = 12;
-				return;
-			} 
-			for (int row = 4; row < 6; row++) {
-				for (int col = 11; col < 13; col++) {
+				targetPlaces.add(new Integer[] {4, 12});
+				lastRowFull = false;
+			} else settledPieces.add(new Integer[] {4, 12});
+
+			if (lastRowFull) {
+				int row = 4, col = 11;
+				while (row < 6 && col < 13) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			for (int row = 4; row < 7; row++) {
-				for (int col = 10; col < 13; col++) {
+			if (lastRowFull) {
+				int row = 4, col = 10;
+				while (row < 7 && col < 13) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			for (int row = 4; row < 8; row++) {
-				for (int col = 9; col < 13; col++) {
+			if (lastRowFull) {
+				int row = 4, col = 9;
+				while (row < 8 && col < 13) {
 					if (board.getBoard()[row][col] == 0) {
-						targetRow = row;
-						targetCol = col;
-						return;
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
 					}
+					row++;
+					col++;
 				}
 			}
-			targetRow = Integer.MAX_VALUE;
-			targetCol = Integer.MAX_VALUE;
-			
+
 		} else System.out.println("you dun goofed, son");
 	}
 
