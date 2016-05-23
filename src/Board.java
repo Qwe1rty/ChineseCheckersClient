@@ -285,7 +285,7 @@ public class Board {
 		}
 
 		try {
-			Thread.sleep(6500);
+			Thread.sleep(7500);
 		}
 		catch (Exception e) {
 			
