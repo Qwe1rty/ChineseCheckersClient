@@ -12,11 +12,6 @@ public class Algorithm {
 
 	private final static int DEPTH = 20; // Please dont make this less than 1
 
-	// If true, we include moves that move backwards
-	// Be aware that if true, then hitting the max depth level is guaranteed
-	// given there is an available jump in the first move
-	private boolean isEndgame = true;
-
 	// Stores all pieces that have reached their final destinations
 	private ArrayList<Integer[]> settledPieces;
 
@@ -31,8 +26,6 @@ public class Algorithm {
 	 * @param color The number representing the player
 	 */
 	public Algorithm(int color) {
-		isEndgame = false;
-
 		if (color < 1 || color > 6) color = 1;
 		else this.color = color;
 	}
@@ -44,9 +37,6 @@ public class Algorithm {
 
 		// Calculates the target given the board position
 		findTargets(board);
-
-		// Checks if the gamestate is in endgame
-		if (!isEndgame && isEndgame()) isEndgame = true;
 
 		// Iterates through all pieces
 		for (int row = 0; row < 17; row++) {
@@ -92,15 +82,6 @@ public class Algorithm {
 				}
 			}
 		}
-
-		// If there aren't any available moves, ACTIVATE LE ENDGAME
-		if (bestMove == null && !isEndgame) {
-			isEndgame = true;
-			bestMove = nextMove(board);
-
-		} else if (bestMove == null && isEndgame) // If endgame's already enabled, then there's no moves available
-			return bestMove;
-
 		return bestMove;
 	}
 
@@ -160,77 +141,20 @@ public class Algorithm {
 		ArrayList<Integer[]> movelist = new ArrayList<Integer[]>();
 		Integer[] temp;
 
-		// If it's the midgame, only check moves that move towards target
-		if (!isEndgame) { 
-			if (color == 1) { // Red, bottom
-				temp = findWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			} else if (color == 2) {
-				temp = findSouthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			} else if (color == 3) {
-				temp = findSouthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			} else if (color == 4) {
-				temp = findEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			} else if (color == 5) {
-				temp = findNorthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			} else if (color == 6) {
-				temp = findNorthWest(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findNorthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-				temp = findSouthEast(board, currentPos, depth);
-				if (temp != null) movelist.add(temp);
-			}
-		} else { // Check ALL moves, including ones that move backwards
-			temp = findWest(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-			temp = findNorthWest(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-			temp = findNorthEast(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-			temp = findEast(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-			temp = findSouthEast(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-			temp = findSouthWest(board, currentPos, depth);
-			if (temp != null) movelist.add(temp);
-		}
+		// Searches for all possible moves
+		temp = findWest(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		temp = findNorthWest(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		temp = findNorthEast(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		temp = findEast(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		temp = findSouthEast(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		temp = findSouthWest(board, currentPos, depth);
+		if (temp != null) movelist.add(temp);
+		
 		return movelist;
 	}
 	private Integer[] findWest(Board board, Integer[] currentPos, int depth) {
