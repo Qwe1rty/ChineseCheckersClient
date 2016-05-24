@@ -11,9 +11,9 @@ import java.util.Scanner;
  */
 
 public class Board {
-	
+
 	private int[][] board;
-	
+
 	public static final int NUM_ROWS = 17;
 	public static final int NUM_COLUMNS = 17;
 
@@ -25,7 +25,7 @@ public class Board {
 	public static final int DIRECTION_SOUTHWEST = 6;
 	public static final int DIRECTION_EAST = 7;
 	public static final int DIRECTION_WEST = 8;
-	
+
 	/** Creates a new board with the setup specified in BoardMap
 	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
 	 *  Postcondition: a new board with the setup specified in BoardMap has been created and returned
@@ -43,7 +43,7 @@ public class Board {
 		for (int row = 0; row < NUM_ROWS; row++)
 			this.board[row] = Arrays.copyOf(board.getBoard()[row], board.getBoard()[row].length);
 	}
-	
+
 	/** Checks if two points on the board are adjacent and returns the direction they are adjacent in
 	 *  Precondition: row1, column1, row2, and column2 are valid integers that correspond to two points
 	 *  on the board
@@ -70,7 +70,7 @@ public class Board {
 			return DIRECTION_NORTHWEST;
 		return 0;
 	}
-	
+
 	/** Returns whether or not a point is a valid point on the board
 	 *  Precondition: coordinates is an initialized Point object with X and Y
 	 *  Postcondition: whether or not the point is a valid point has been returned
@@ -81,7 +81,7 @@ public class Board {
 		return (coordinates.getX() < NUM_ROWS && coordinates.getX() >= 0 && coordinates.getY() >= 0 
 				&& coordinates.getY() < NUM_COLUMNS && board[(int)coordinates.getX()][(int)coordinates.getY()] > -1);
 	}
-	
+
 	/** Returns whether or not a point is a valid point on the board
 	 *  Precondition: row and column are valid integers
 	 *  Postcondition: whether or not the point is a valid point has been returned
@@ -92,7 +92,7 @@ public class Board {
 	public boolean isValidPoint(int row, int column) {
 		return (row < NUM_ROWS && row >= 0 && column >= 0 && column < NUM_COLUMNS && board[row][column] > -1);
 	}
-	
+
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
 	 *  Precondition: coordinates is an initialized Point object with X and Y and direction is an integer representing
 	 *  one of the direction constants
@@ -105,7 +105,7 @@ public class Board {
 	public Point getAdjacent(Point coordinates, int direction) {
 		return getAdjacent((int)coordinates.getX(), (int)coordinates.getY(), direction);
 	}
-	
+
 	/** Gets the coordinates of the point adjacent to the specified point in the specified direction
 	 *  Precondition: row and column are valid integers representing a position on the boardand direction 
 	 *  is an integer representing one of the direction constants
@@ -131,7 +131,7 @@ public class Board {
 			return new Point(row - 1, column - 1);
 		return null;
 	}
-	
+
 	/** A recursive algorithm for determine whether or not a piece can jump to the specified spot
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board, and alreadyChecked is an initialized NUM_ROWS by NUM_COLUMNS
@@ -150,11 +150,11 @@ public class Board {
 		// Check if this spot has already been visited
 		if (alreadyChecked[originalRow][originalColumn] == 1)
 			return false;
-		
+
 		// Check if trying to jump to or from an occupied location
 		if (board[newRow][newColumn] != 0 || board[originalRow][originalColumn] != 0)
 			return false;
-		
+
 		alreadyChecked[originalRow][originalColumn] = 1;
 		// Check in all possible piece directions - not north or south
 		for (int direction = 1; direction <= 8; direction++) {
@@ -167,14 +167,14 @@ public class Board {
 					//the spot you want to go from that spot
 					if (isValidPoint(jumpSpot) &&
 							(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
-							canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
+									canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
 						return true;					
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	/** Checks if moving a piece from one position to another is valid
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board
@@ -192,31 +192,39 @@ public class Board {
 		if (!isValidPoint(originalRow, originalColumn) || !isValidPoint(newRow, newColumn)
 				|| board[newRow][newColumn] != 0)
 			return false;
-		
+
 		// Check if the spots are identical
 		if (originalRow == newRow && originalColumn == newColumn)
 			return false;
-		
+
 		// Check if the two spots are beside each other
 		if (isAdjacent(originalRow, originalColumn, newRow, newColumn) > 0)
 			return true;
-		
+
 		// Check if you can jump from the original point to the new point
 		return canJump(originalRow, originalColumn, newRow, newColumn, new int[NUM_ROWS][NUM_COLUMNS]);
 	}
-	
+
 	public boolean notAllowedHome(int row, int column, int thisPlayer) {
-		for (int player = 1; player <= 6; player++) {
-			if (player % 3 != thisPlayer % 3) {
-				if (isHome(row, column, player)) {
-					return true;
-				}
-			}
-		}
+		if (thisPlayer == 1 || thisPlayer == 4) return 
+				isHome(row, column, 2) ||
+				isHome(row, column, 3) || 
+				isHome(row, column, 5) ||
+				isHome(row, column, 6);
+		else if (thisPlayer == 2 || thisPlayer == 5) return
+				isHome(row, column, 1) ||
+				isHome(row, column, 3) || 
+				isHome(row, column, 4) ||
+				isHome(row, column, 6);
+		else if (thisPlayer == 3 || thisPlayer == 6) return
+				isHome(row, column, 1) ||
+				isHome(row, column, 2) || 
+				isHome(row, column, 4) ||
+				isHome(row, column, 5);
 		return false;
-		
+
 	}
-	
+
 	/** Checks if a spot is in the home of another player
 	 * 
 	 *  @param row
@@ -247,7 +255,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/** Checks if a spot is a valid move, counting other player's homes as invalid
 	 * 
 	 *  @param originalRow
@@ -269,7 +277,7 @@ public class Board {
 			return true;
 		return false;
 	}
-	
+
 	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board
@@ -288,7 +296,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board
@@ -307,7 +315,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board
@@ -323,7 +331,7 @@ public class Board {
 		board[originalRow][originalColumn] = 0;
 		return true;
 	}
-	
+
 	/** Initializes the board for a new game
 	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
 	 *  Postcondition: the board has been initialized using the setup encoded in BoardMap
@@ -334,7 +342,7 @@ public class Board {
 			// Read the board map
 			File boardMap = new File("BoardMap");
 			Scanner inFile = new Scanner(boardMap);
-			
+
 			// Block off ineligible spots
 			for (int row = 0; row < NUM_ROWS; row++) {
 				String boardRow = inFile.nextLine();
@@ -353,20 +361,20 @@ public class Board {
 			return false;
 		}
 	}
-	
+
 	/** Gets the board
 	 *  @return the board
 	 */
 	public int[][] getBoard() {
 		return board;
 	}
-	
+
 	public static void main (String[] args) {
 		// Board testing code
-		
+
 		Board newBoard = new Board();
 		BoardDisplay window = new BoardDisplay(newBoard.board);
-		
+
 		// Testing
 		Algorithm[] algorithms = new Algorithm[6];
 		for (int player = 0; player < 6; player++) {
@@ -377,22 +385,22 @@ public class Board {
 			Thread.sleep(200);
 		}
 		catch (Exception e) {
-			
-		}
-		
-		System.out.println(newBoard.move(4, 2, 8, 4));
-		
 
-		try {
-			Thread.sleep(200000);
 		}
-		catch (Exception e) {
-			
-		}
-		
+
+		//		System.out.println(newBoard.move(4, 2, 8, 4));
+		//		
+		//
+		//		try {
+		//			Thread.sleep(200000);
+		//		}
+		//		catch (Exception e) {
+		//			
+		//		}
+
 		int currentTurn = 1;
 		while(true) {
-			for (int player = 1; player <= 6; player++) {
+			for (int player = 1; player <= 4; player++) {
 				window.setTurn(currentTurn);
 				int[] move = Client.opening(player, currentTurn, newBoard);
 				if (move == null)
@@ -405,13 +413,13 @@ public class Board {
 					Thread.sleep(50);
 				}
 				catch (Exception e) {
-					
+
 				}
 			}
 			currentTurn++;
 		}
-		
-		
+
+
 	}
 
 }

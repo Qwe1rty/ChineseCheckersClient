@@ -10,8 +10,11 @@ public class Algorithm {
 
 	// tinyurl.com/chinesecheckersprotocol
 
-	private final static int DEPTH = 20; // Please dont make this less than 1
-
+	// Please dont make this less than 1
+	// Note that whatever the depth is, the algorithm will guaranteed reach the 
+	// max depth level assuming a single jump is possible anywhere at the start
+	private final static int DEPTH = 20; 
+	
 	// Stores all pieces that have reached their final destinations
 	private ArrayList<Integer[]> settledPieces;
 
@@ -107,6 +110,7 @@ public class Algorithm {
 
 		// If at final depth level, return watchu' got
 		if (depth > DEPTH) {
+
 			// If the final position of the piece is in another person's home space, discard result
 			if (board.notAllowedHome(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], color)
 					&& board.getBoard()[moveList.get(moveList.size() - 1)[0]][moveList.get(moveList.size() - 1)[1]] != 1) {
@@ -117,11 +121,11 @@ public class Algorithm {
 			else return moveList;
 		}
 
-		// Looks for all possible moves for the current position
-		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
-
 		// Stores the best move found so far
 		ArrayList<Integer[]> bestMoves = new ArrayList<Integer[]>();
+
+		// Looks for all possible moves for the current position
+		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
 
 		// Iterating through all possible moves
 		for (int i = 0; i < possibleMoves.size(); i++) {
@@ -140,24 +144,34 @@ public class Algorithm {
 			// Also updates the board positions with the new move
 			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], 
 					possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
+				
+				System.out.println("OMG FUCK YOU");
 
 				// If the first move is a jump and not a walk, search for all further moves
-				if (depth == 1 && isJump(potentialMoves)) {
+				if (isJump(potentialMoves)) {
+					
+					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
+					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
+					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
 
 					// Search tree for best move
 					ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
 
 					// Checks if searched move is better than the current one
-					if (bestMoves.size() == 0 || distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
+					if (bestMoves.size() == 0 ||
+							distanceTravelledToTarget(bestSubMoves) > distanceTravelledToTarget(bestMoves))
 						bestMoves = bestSubMoves;
 
 				} else if (bestMoves.size() == 0 || distanceTravelledToTarget(potentialMoves) > distanceTravelledToTarget(bestMoves)) {
-
 					// If it's a walk, just check the walk distance
-					bestMoves = potentialMoves; 
+					
+					// If the final position of the piece is not in another person's home space, keep result
+					if (!board.notAllowedHome(potentialMoves.get(potentialMoves.size() - 1)[0], potentialMoves.get(potentialMoves.size() - 1)[1], color))
+						bestMoves = potentialMoves;
 				}
 			}
 		}
+
 		return bestMoves;
 	}
 
