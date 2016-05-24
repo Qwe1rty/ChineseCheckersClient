@@ -165,8 +165,9 @@ public class Client {
 			int[] move = null;
 			//if (currentTurn <= 5)
 			//	move = opening(player, currentTurn, board);
-			if (move == null)
-				move = algorithm.nextMove(board);
+			//if (move == null)
+			move = algorithm.nextMove(board);
+			System.out.println(board.isValidMove(move[0], move[1], move[2], move[3]));
 			// Check if move was timed out
 			try {
 				if (myReader.ready()){
