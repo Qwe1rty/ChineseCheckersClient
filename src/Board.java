@@ -200,6 +200,18 @@ public class Board {
 		return canJump(originalRow, originalColumn, newRow, newColumn, new int[NUM_ROWS][NUM_COLUMNS]);
 	}
 	
+	public boolean notAllowedHome(int row, int column, int thisPlayer) {
+		for (int player = 1; player <= 6; player++) {
+			if (player % 3 != thisPlayer % 3) {
+				if (isHome(row, column, player)) {
+					return true;
+				}
+			}
+		}
+		return false;
+		
+	}
+	
 	/** Checks if a spot is in the home of another player
 	 * 
 	 *  @param row
@@ -363,7 +375,15 @@ public class Board {
 			
 		}
 		
-		//System.out.println(4, 2, 8, 4);
+		System.out.println(newBoard.move(4, 2, 8, 4));
+		
+
+		try {
+			Thread.sleep(2000);
+		}
+		catch (Exception e) {
+			
+		}
 		
 		int currentTurn = 1;
 		while(true) {
