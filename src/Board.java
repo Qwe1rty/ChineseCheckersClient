@@ -152,7 +152,7 @@ public class Board {
 			return false;
 		
 		// Check if trying to jump to or from an occupied location
-		if (board[newRow][newColumn] != 0 || board[originalRow][originalColumn] != 0)
+		if (board[newRow][newColumn] != 0)
 			return false;
 		
 		alreadyChecked[originalRow][originalColumn] = 1;
@@ -164,8 +164,8 @@ public class Board {
 				if (isValidPoint(otherSpot) && board[(int)otherSpot.getX()][(int)otherSpot.getY()] > 0) {
 					Point jumpSpot = getAdjacent(otherSpot, direction);
 					// Check if that spot beyond the piece is where you want to go, or if it's possible to jump to 
-					//the spot you want to go from that spot
-					if (isValidPoint(jumpSpot) &&
+					// the spot you want to go from that spot
+					if (isValidPoint(jumpSpot) && board[(int)jumpSpot.getX()][(int)jumpSpot.getY()] == 0 &&
 							(((int)jumpSpot.getX() == newRow && (int)jumpSpot.getY() == newColumn) ||
 							canJump((int)jumpSpot.getX(), (int)jumpSpot.getY(), newRow, newColumn, alreadyChecked)))
 						return true;					
@@ -380,15 +380,18 @@ public class Board {
 			
 		}
 		
-		System.out.println(newBoard.move(4, 2, 8, 4));
+		//System.out.println(newBoard.move(4, 2, 6, 4));
+		//window.refresh();
+		//System.out.println(newBoard.move(4, 0, 4, 4));
+		//window.refresh();
 		
 
-		try {
-			Thread.sleep(200000);
-		}
-		catch (Exception e) {
-			
-		}
+		//try {
+		//	Thread.sleep(20000);
+		//}
+		//catch (Exception e) {
+		//	
+		//}
 		
 		int currentTurn = 1;
 		while(true) {
