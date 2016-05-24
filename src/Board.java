@@ -146,8 +146,13 @@ public class Board {
 	 *  possibly using multiple jumps
 	 */
 	private boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
+		System.out.println(originalRow + " " + originalColumn+ " " + newRow+ " " + newColumn);
 		// Check if this spot has already been visited
 		if (alreadyChecked[originalRow][originalColumn] == 1)
+			return false;
+		
+		// Check if trying to jump to or from an occupied location
+		if (board[newRow][newColumn] != 0 || board[originalRow][originalColumn] != 0)
 			return false;
 		
 		alreadyChecked[originalRow][originalColumn] = 1;
@@ -369,7 +374,7 @@ public class Board {
 		}
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(200);
 		}
 		catch (Exception e) {
 			
@@ -379,7 +384,7 @@ public class Board {
 		
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(200000);
 		}
 		catch (Exception e) {
 			
