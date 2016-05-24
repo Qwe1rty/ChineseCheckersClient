@@ -263,6 +263,25 @@ public class Board {
 	 *  @param newColumn the column of the space to move the piece to
 	 *  @return whether or not the move was successfully made (i.e. whether or not it is valid)
 	 */
+	public boolean moveNotOtherHomes(int originalRow, int originalColumn, int newRow, int newColumn, int player) {
+		if (isValidMoveNoOtherHomes(originalRow, originalColumn, newRow, newColumn, player)) {
+			board[newRow][newColumn] = board[originalRow][originalColumn];
+			board[originalRow][originalColumn] = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
+	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
+	 *  that correspond to two points on the board
+	 *  Postcondition: whether or not the move was successfully made has been returned
+	 *  @param originalRow the original row of the piece
+	 *  @param originalColumn the original column of the piece
+	 *  @param newRow the row of the space to move the piece to
+	 *  @param newColumn the column of the space to move the piece to
+	 *  @return whether or not the move was successfully made (i.e. whether or not it is valid)
+	 */
 	public boolean move(int originalRow, int originalColumn, int newRow, int newColumn) {
 		if (isValidMove(originalRow, originalColumn, newRow, newColumn)) {
 			board[newRow][newColumn] = board[originalRow][originalColumn];
