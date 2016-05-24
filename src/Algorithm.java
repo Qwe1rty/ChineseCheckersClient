@@ -129,7 +129,8 @@ public class Algorithm {
 
 			// If the move is valid (sometimes it might not be)
 			// Also updates the board positions with the new move
-			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
+			if (newBoard.moveNoOtherHomes(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], 
+					possibleMoves.get(i)[0], possibleMoves.get(i)[1], color)) {
 
 				// If the first move is a jump and not a walk, search for all further moves
 				if (depth == 1 && isJump(potentialMoves)) {

@@ -263,7 +263,7 @@ public class Board {
 	 *  @param newColumn the column of the space to move the piece to
 	 *  @return whether or not the move was successfully made (i.e. whether or not it is valid)
 	 */
-	public boolean moveNotOtherHomes(int originalRow, int originalColumn, int newRow, int newColumn, int player) {
+	public boolean moveNoOtherHomes(int originalRow, int originalColumn, int newRow, int newColumn, int player) {
 		if (isValidMoveNoOtherHomes(originalRow, originalColumn, newRow, newColumn, player)) {
 			board[newRow][newColumn] = board[originalRow][originalColumn];
 			board[originalRow][originalColumn] = 0;
