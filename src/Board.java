@@ -243,7 +243,7 @@ public class Board {
 	public boolean isValidMoveNoOtherHomes(int originalRow, int originalColumn, int newRow, int newColumn, int currentPlayer) {
 		for (int player = 1; player <= 6; player++) {
 			if (player % 3 != currentPlayer % 3) {
-				if (isHome(newRow, newColumn, currentPlayer)) {
+				if (isHome(newRow, newColumn, player)) {
 					return false;
 				}
 			}

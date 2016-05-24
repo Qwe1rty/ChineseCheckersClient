@@ -147,6 +147,7 @@ public class Client {
 			boardWindow.setPlayer(player);
 			currentTurn = 1;
 			algorithm = new Algorithm(player);
+			boardWindow.setPlayer(1);
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
@@ -187,6 +188,7 @@ public class Client {
 			
 			// Keep track of turns
 			currentTurn++;
+			boardWindow.setPlayer(currentTurn);
 			System.out.println("Turn");
 		}
 		else if (messageType == SERVER_INVALID_MOVE) {
