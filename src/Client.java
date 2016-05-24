@@ -162,8 +162,8 @@ public class Client {
 			isTimedOut = false;
 			// Make and send move
 			int[] move = null;
-			if (currentTurn <= 5)
-				move = opening(player, currentTurn, board);
+			//if (currentTurn <= 5)
+			//	move = opening(player, currentTurn, board);
 			if (move == null)
 				move = algorithm.nextMove(board);
 			// Check if move was timed out

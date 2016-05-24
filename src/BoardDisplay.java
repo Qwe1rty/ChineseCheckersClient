@@ -18,7 +18,8 @@ import javax.swing.UIManager;
 public class BoardDisplay {
 	
 	private JFrame mainWindow;
-	private JPanel boardPanel, playerPanel;
+	private JPanel boardPanel, playerPanel, turnPanel;
+	private JLabel turnLabel;
 	
 	private int[][] board;
 	
@@ -46,10 +47,14 @@ public class BoardDisplay {
 		
 		playerPanel = new JPanel();
 		UIManager.put("Label.font", DEFAULT_FONT);
-		JLabel playerLabel = new JLabel("Player: ");
+		turnPanel = new JPanel();
+		JLabel playerLabel = new JLabel("Player:     ");
+		turnLabel = new JLabel("Turn: ");
 		//playerPanel.setSize(100, 700);
 		
 		playerPanel.add(playerLabel);
+		turnPanel.add(turnLabel);
+		playerPanel.add(turnPanel);
 		mainPanel.add(playerPanel);
 		
 		boardPanel = new JPanel();
@@ -98,10 +103,21 @@ public class BoardDisplay {
 	 */
 	public void setPlayer(int playerNumber) {
 		playerPanel.removeAll();
-		JLabel newPlayerLabel = new JLabel("Player " + playerNumber + ": " + PLAYER_COLOURS[playerNumber - 1]);
+		JLabel newPlayerLabel = new JLabel("Player " + playerNumber + ": " + PLAYER_COLOURS[playerNumber - 1] + "   ");
 		playerPanel.add(newPlayerLabel);
 		playerPanel.revalidate();
 		playerPanel.repaint();	
+	}
+	
+	/** Displays the current turn
+	 *  @param turn 
+	 */
+	public void setTurn(int turn) {
+		turnPanel.removeAll();
+		turnLabel = new JLabel("Turn: " + turn);
+		turnPanel.add(turnLabel);
+		turnLabel.revalidate();
+		turnLabel.repaint();	
 	}
 
 	/** Displays that a player has won and whether or not this player (the client) has won

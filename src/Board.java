@@ -338,7 +338,7 @@ public class Board {
 		}
 
 		try {
-			Thread.sleep(7500);
+			Thread.sleep(2000);
 		}
 		catch (Exception e) {
 			
@@ -347,6 +347,7 @@ public class Board {
 		int currentTurn = 1;
 		while(true) {
 			for (int player = 1; player <= 6; player++) {
+				window.setTurn(currentTurn);
 				int[] move = Client.opening(player, currentTurn, newBoard);
 				if (move == null)
 					move = algorithms[player - 1].nextMove(newBoard);
