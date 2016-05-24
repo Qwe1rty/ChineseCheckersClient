@@ -106,7 +106,16 @@ public class Algorithm {
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
 
 		// If at final depth level, return watchu' got
-		if (depth > DEPTH) return moveList;
+		if (depth > DEPTH) {
+			// If the final position of the piece is in another person's home space, discard result
+			if (board.notAllowedHome(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], color)
+					&& board.getBoard()[moveList.get(moveList.size() - 1)[0]][moveList.get(moveList.size() - 1)[1]] != 1) {
+				return new ArrayList<Integer[]>(); // Length zero, will be discarded later in program
+			}
+
+			// Otherwise return delicious list
+			else return moveList;
+		}
 
 		// Looks for all possible moves for the current position
 		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
@@ -129,8 +138,8 @@ public class Algorithm {
 
 			// If the move is valid (sometimes it might not be)
 			// Also updates the board positions with the new move
-			if (newBoard.moveNoOtherHomes(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], 
-					possibleMoves.get(i)[0], possibleMoves.get(i)[1], color)) {
+			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], 
+					possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
 
 				// If the first move is a jump and not a walk, search for all further moves
 				if (depth == 1 && isJump(potentialMoves)) {
@@ -143,7 +152,7 @@ public class Algorithm {
 						bestMoves = bestSubMoves;
 
 				} else if (bestMoves.size() == 0 || distanceTravelledToTarget(potentialMoves) > distanceTravelledToTarget(bestMoves)) {
-					
+
 					// If it's a walk, just check the walk distance
 					bestMoves = potentialMoves; 
 				}
@@ -178,10 +187,10 @@ public class Algorithm {
 		if (temp != null) movelist.add(temp);
 		temp = findSouthWest(board, currentPos, depth);
 		if (temp != null) movelist.add(temp);
-		
+
 		return movelist;
 	}
-	
+
 	/**
 	 * Finds possible moves west of current position
 	 * @param board Chinese checkers game board
@@ -200,7 +209,7 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	
+
 	/**
 	 * Finds possible moves northwest of current position
 	 * @param board Chinese checkers game board
@@ -219,7 +228,7 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	
+
 	/**
 	 * Finds possible moves northeast of current position
 	 * @param board Chinese checkers game board
@@ -238,7 +247,7 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	
+
 	/**
 	 * Finds possible moves east of current position
 	 * @param board Chinese checkers game board
@@ -257,7 +266,7 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	
+
 	/**
 	 * Finds possible moves south east of current position
 	 * @param board Chinese checkers game board
@@ -276,7 +285,7 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
-	
+
 	/**
 	 * Finds possible moves southwest of current position
 	 * @param board Chinese checkers game board
