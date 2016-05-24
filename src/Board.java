@@ -200,6 +200,59 @@ public class Board {
 		return canJump(originalRow, originalColumn, newRow, newColumn, new int[NUM_ROWS][NUM_COLUMNS]);
 	}
 	
+	/** Checks if a spot is in the home of another player
+	 * 
+	 *  @param row
+	 *  @param column
+	 *  @param player
+	 *  @return
+	 */
+	private boolean isHome(int row, int column, int player) {
+		if (!isValidPoint(row, column))
+			return false;
+		if (player == 1 && row >= 13) {
+			return true;
+		}
+		else if (player == 2 && column >= 13) {
+			return true;
+		}
+		else if (player == 3 && row >= 4 && row <= 7 && column >= row + 5) {
+			return true;
+		}
+		else if (player == 4 && row <= 3) {
+			return true;
+		}
+		else if (player == 5 && column <= 3) {
+			return true;
+		}
+		else if (player == 6 && row >= 9 && row <= 12 && column <= row - 5) {
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if a spot is a valid move, counting other player's homes as invalid
+	 * 
+	 *  @param originalRow
+	 *  @param originalColumn
+	 *  @param newRow
+	 *  @param newColumn
+	 *  @param currentPlayer
+	 *  @return
+	 */
+	public boolean isValidMoveNoOtherHomes(int originalRow, int originalColumn, int newRow, int newColumn, int currentPlayer) {
+		for (int player = 1; player <= 6; player++) {
+			if (player % 3 != currentPlayer % 3) {
+				if (isHome(newRow, newColumn, currentPlayer)) {
+					return false;
+				}
+			}
+		}
+		if (isValidMove(originalRow, originalColumn, newRow, newColumn))
+			return true;
+		return false;
+	}
+	
 	/** Checks if a piece can be moved to a particular spot and moves it if the move is valid
 	 *  Precondition: originalRow, originalColumn, newRow, and newColumn are valid integers 
 	 *  that correspond to two points on the board
