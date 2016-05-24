@@ -207,7 +207,7 @@ public class Board {
 	 *  @param player
 	 *  @return
 	 */
-	private boolean isHome(int row, int column, int player) {
+	public boolean isHome(int row, int column, int player) {
 		if (!isValidPoint(row, column))
 			return false;
 		if (player == 1 && row >= 13) {
@@ -362,6 +362,8 @@ public class Board {
 		catch (Exception e) {
 			
 		}
+		
+		//System.out.println(4, 2, 8, 4);
 		
 		int currentTurn = 1;
 		while(true) {

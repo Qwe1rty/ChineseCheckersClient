@@ -189,7 +189,7 @@ public class Client {
 			
 			// Keep track of turns
 			currentTurn++;
-			boardWindow.setPlayer(currentTurn);
+			boardWindow.setTurn(currentTurn);
 			System.out.println("Turn");
 		}
 		else if (messageType == SERVER_INVALID_MOVE) {
