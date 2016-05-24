@@ -30,6 +30,14 @@ public class Algorithm {
 		else this.color = color;
 	}
 
+	/**
+	 * Given the current state of the board, it will calculate the optimal
+	 * move to make
+	 * 
+	 * @param board Chinese checkers game board
+	 * @return A 4 element long 2D integer array which contains the row and column 
+	 * of the piece to be moved, followed by the row and column of its final position
+	 */
 	public int[] nextMove(Board board) {
 
 		// Stores the length of the distance travelled
@@ -85,7 +93,16 @@ public class Algorithm {
 		return bestMove;
 	}
 
-	// Recursively searches through the board for the move that covers the most distance
+	/**
+	 * Recursively searches through the board for the move that covers the most distance.
+	 * Includes both walks and jumps, and will internally make sure that the only moves
+	 * it branches out into are valid
+	 * @param board Chinese checkers game board
+	 * @param moveList A list of moves taken on a certain branch
+	 * @param depth The current recursive iteration depth
+	 * @return An arraylist of the sequential moves of the branch that has progressed
+	 * most to the target
+	 */
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
 
 		// If at final depth level, return watchu' got
@@ -134,7 +151,13 @@ public class Algorithm {
 		return bestMoves;
 	}
 
-	// Finds all possible moves given a piece's position
+	/**
+	 * Finds all immediate possible moves given a piece's position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An arraylist of all the possible immediate moves the piece could make
+	 */
 	private ArrayList<Integer[]> findMoves(Board board, Integer[] currentPos, int depth) {
 
 		// Variable initialization
@@ -157,6 +180,15 @@ public class Algorithm {
 		
 		return movelist;
 	}
+	
+	/**
+	 * Finds possible moves west of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findWest(Board board, Integer[] currentPos, int depth) {
 		try { // W
 			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0) 
@@ -167,6 +199,15 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
+	
+	/**
+	 * Finds possible moves northwest of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findNorthWest(Board board, Integer[] currentPos, int depth) {
 		try { // NW
 			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] == 0) 
@@ -177,6 +218,15 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
+	
+	/**
+	 * Finds possible moves northeast of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findNorthEast(Board board, Integer[] currentPos, int depth) {
 		try { // NE
 			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1]] == 0) 
@@ -187,6 +237,15 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
+	
+	/**
+	 * Finds possible moves east of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findEast(Board board, Integer[] currentPos, int depth) {
 		try { // E
 			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0) 
@@ -197,6 +256,15 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
+	
+	/**
+	 * Finds possible moves south east of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findSouthEast(Board board, Integer[] currentPos, int depth) {
 		try { // SE
 			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] == 0) 
@@ -207,6 +275,15 @@ public class Algorithm {
 			else return null;
 		} catch (Exception e) {return null;}
 	}
+	
+	/**
+	 * Finds possible moves southwest of current position
+	 * @param board Chinese checkers game board
+	 * @param currentPos Current position of the piece to check
+	 * @param depth Current iteration depth
+	 * @return An integer array with two elements containing the row and column of the
+	 * move the current piece can make. If no move is possible, returns null
+	 */
 	private Integer[] findSouthWest(Board board, Integer[] currentPos, int depth) {
 		try { // SW
 			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1]] == 0) 
@@ -218,7 +295,15 @@ public class Algorithm {
 		} catch (Exception e) {return null;}
 	}
 
-	// Finds the distance between two points
+	/**
+	 * Finds the total distance travelled to the target given a starting position
+	 * and end position
+	 * @param startRow Start position row
+	 * @param startCol Start position column
+	 * @param endRow End position row 
+	 * @param endCol End position column
+	 * @return An integer denoting the total distance travelled towards the target
+	 */
 	private int distanceTravelledToTarget(int startRow, int startCol, int endRow, int endCol) {
 		int currentDistance = Integer.MAX_VALUE, endDistance = Integer.MAX_VALUE;
 		for (int i = 0; i < targetPlaces.size(); i++) {
@@ -234,11 +319,23 @@ public class Algorithm {
 		if (currentDistance == Integer.MAX_VALUE || endDistance == Integer.MAX_VALUE) return Integer.MIN_VALUE;
 		else return currentDistance - endDistance;
 	}
-	// Same as above but for an array with 4 integers
+	/**
+	 * Finds the total distance travelled to the target given a starting position
+	 * and end position
+	 * @param places An integer array of four elements containing the starting row, 
+	 * starting column, end row, and end column in that respective order 
+	 * @return An integer denoting the total distance travelled towards the target
+	 */
 	private int distanceTravelledToTarget(int[] places) {
 		return distanceTravelledToTarget(places[0], places[1], places[2], places[3]); 
 	}
-	// Same as above but for an arraylist of integer arrays
+	/**
+	 * Finds the total distance travelled to the target given a starting position
+	 * and end position
+	 * @param moveList An arraylist of integer arrays where the starting position is the
+	 * first element and the end position is the last element 
+	 * @return An integer denoting the total distance travelled towards the target
+	 */
 	private int distanceTravelledToTarget(ArrayList<Integer[]> moveList) {
 		if (moveList.size() > 0) {
 			return distanceTravelledToTarget(moveList.get(0)[0], moveList.get(0)[1], 
@@ -246,19 +343,22 @@ public class Algorithm {
 		} else return Integer.MIN_VALUE;
 	}
 
-	// Determines if the most recent move is a jump
+	/**
+	 * Determines if the most recent move is a jump
+	 * @param moveList A list of moves taken
+	 * @return Returns true if the most recent move taken is a jump. Returns false if
+	 * it is a walk
+	 */
 	private boolean isJump(ArrayList<Integer[]> moveList) {
 		Integer[] currentMove = moveList.get(moveList.size() - 1);
 		Integer[] lastMove = moveList.get(moveList.size() - 2);
 		return ((int) Math.abs(currentMove[0] - lastMove[0]) > 1) || ((int) Math.abs(currentMove[1] - lastMove[1]) > 1); 
 	}
 
-	// Determines if the state of the game is in its endgame
-	private boolean isEndgame() {
-		return settledPieces.size() > 0;
-	}
-
-	// Locates the farthest row that needs to be filled
+	/**
+	 * Locates the farthest row that needs to be filled given the player
+	 * @param board Current state of the board
+	 */
 	private void findTargets(Board board) {
 
 		// Initializashuns!
@@ -339,6 +439,32 @@ public class Algorithm {
 					col++;
 				}
 			}
+			if (lastRowFull) {
+				int row = 8, col = 4;
+				while (row < 13 && col < 9) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
+			if (lastRowFull) {
+				int row = 7, col = 4;
+				while (row < 13 && col < 10) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
 
 		} else if (color == 4) { // Green, top
 			for (int row = 16; row >= 0; row--) {
@@ -403,6 +529,32 @@ public class Algorithm {
 			if (lastRowFull) {
 				int row = 4, col = 9;
 				while (row < 8 && col < 13) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
+			if (lastRowFull) {
+				int row = 4, col = 8;
+				while (row < 9 && col < 13) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
+			if (lastRowFull) {
+				int row = 4, col = 7;
+				while (row < 10 && col < 13) {
 					if (board.getBoard()[row][col] == 0) {
 						lastRowFull = false;
 						targetPlaces.add(new Integer[] {row, col});
