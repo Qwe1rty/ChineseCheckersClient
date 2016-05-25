@@ -25,7 +25,7 @@ public class Board {
 	public static final int DIRECTION_EAST = 7;
 	public static final int DIRECTION_WEST = 8;
 	
-	private static boolean isTesting = false;
+	private static boolean isTesting = true;
 	
 	/** Creates a new board with the setup specified in BoardMap
 	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
@@ -219,15 +219,22 @@ public class Board {
 	 *  @return true if the spot is in a home that the player should not enter, false otherwise
 	 */
 	public boolean notAllowedHome(int row, int column, int thisPlayer) {
-		for (int player = 1; player <= 6; player++) {
-			if (player % 3 != thisPlayer % 3) {
-				if (isHome(row, column, player)) {
-					return true;
-				}
-			}
-		}
+		if (thisPlayer == 1 || thisPlayer == 4) return 
+				isHome(row, column, 2) ||
+				isHome(row, column, 3) || 
+				isHome(row, column, 5) ||
+				isHome(row, column, 6);
+		else if (thisPlayer == 2 || thisPlayer == 5) return
+				isHome(row, column, 1) ||
+				isHome(row, column, 3) || 
+				isHome(row, column, 4) ||
+				isHome(row, column, 6);
+		else if (thisPlayer == 3 || thisPlayer == 6) return
+				isHome(row, column, 1) ||
+				isHome(row, column, 2) || 
+				isHome(row, column, 4) ||
+				isHome(row, column, 5);
 		return false;
-		
 	}
 	
 	/** Checks if a spot is in the home of a player

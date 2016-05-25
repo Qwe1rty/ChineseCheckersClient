@@ -13,7 +13,7 @@ public class Algorithm {
 	// Please dont make this less than 1
 	// Note that whatever the depth is, the algorithm will guaranteed reach the 
 	// max depth level assuming a single jump is possible anywhere at the start
-	private final static int DEPTH = 8; 
+	private final static int DEPTH = 14; 
 	
 	// Stores all pieces that have reached their final destinations
 	private ArrayList<Integer[]> settledPieces;
@@ -128,15 +128,38 @@ public class Algorithm {
 		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
 		
 		// Removes all previously visited possible moves
-//		for (int i = possibleMoves.size() - 1; i >= 0; i--) {
-//			for (int j = 0; j < moveList.size(); j++) {
-//				if (possibleMoves.get(i)[0] == moveList.get(j)[0] && possibleMoves.get(i)[1] == moveList.get(j)[1]) {
-//					possibleMoves.remove(i);
-//					break;
-//				}
-//			}
-//		}
+		for (int i = possibleMoves.size() - 1; i >= 0; i--) {
+			for (int j = 0; j < moveList.size(); j++) {
+				if (possibleMoves.get(i)[0] == moveList.get(j)[0] && possibleMoves.get(i)[1] == moveList.get(j)[1]) {
+					possibleMoves.remove(i);
+					break;
+				}
+			}
+		}
 
+		// If there are no possible moves afterwards that advance the branch, it
+		// means you've reached the end of the branch. Will just return the sublist within 
+		// the current move list that makes it most to the target row
+		if (possibleMoves.size() == 0) {
+			
+			// Iterates through all sub move list lengths
+			for (int i = moveList.size() - 1; i > 0; i--) {
+				
+				// Fills in all the sub move list values from the beginning on up
+				ArrayList<Integer[]> subMoveList = new ArrayList<Integer[]>();
+				for (int j = 0; j <= i; j++) subMoveList.add(moveList.get(j));
+				
+				// If this submove turns out to be the best so far, keep it
+				if (bestMoves.size() == 0 || distanceTravelledToTarget(subMoveList) > distanceTravelledToTarget(bestMoves))
+					
+					// If the last move isn't on someone else's home territory
+					if (!board.notAllowedHome(subMoveList.get(subMoveList.size() - 1)[0], subMoveList.get(subMoveList.size() - 1)[1], color)
+							&& board.getBoard()[subMoveList.get(subMoveList.size() - 1)[0]][subMoveList.get(subMoveList.size() - 1)[1]] != 1)
+						
+						bestMoves = subMoveList;
+			}
+		}
+		
 		// Iterating through all possible moves
 		for (int i = 0; i < possibleMoves.size(); i++) {
 
@@ -176,6 +199,7 @@ public class Algorithm {
 			}
 		}
 
+		if (bestMoves == null) return new ArrayList<Integer[]>(); // Blank arraylists are disposed of later
 		return bestMoves;
 	}
 
