@@ -9,7 +9,7 @@ import java.util.Scanner;
 /** The Client Class
  *  Communicates with the server for the Chinese Checkers AI
  *  @author Darren Chan
- *	@version May 17, 2016
+ *	@version May 24, 2016
  */
 
 public class Client {
@@ -25,6 +25,8 @@ public class Client {
 	public static final int SERVER_WIN = 7;
 	
 	public static final int CLIENT_MOVE = 1;
+	
+	private static final boolean OPENING_ENABLED = false;
 	
 	private InputStreamReader myStream;
 	private BufferedReader myReader;
@@ -163,10 +165,10 @@ public class Client {
 			isTimedOut = false;
 			// Make and send move
 			int[] move = null;
-			//if (currentTurn <= 5)
-			//	move = opening(player, currentTurn, board);
-			//if (move == null)
-			move = algorithm.nextMove(board);
+			if (currentTurn <= 5 && OPENING_ENABLED)
+				move = opening(player, currentTurn, board);
+			if (move == null)
+				move = algorithm.nextMove(board);
 			System.out.println(board.isValidMove(move[0], move[1], move[2], move[3]));
 			// Check if move was timed out
 			try {
