@@ -375,6 +375,7 @@ public class Board {
 	
 	public static void main (String[] args) {
 		// Board testing code
+		isTesting = true;
 		
 		Board newBoard = new Board();
 		BoardDisplay window = new BoardDisplay(newBoard.board);
@@ -384,7 +385,6 @@ public class Board {
 		for (int player = 0; player < 6; player++) {
 			algorithms[player] = new Algorithm(player + 1);
 		}
-		isTesting = true;
 
 		try {
 			Thread.sleep(200);
