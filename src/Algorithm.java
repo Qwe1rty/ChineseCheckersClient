@@ -8,7 +8,8 @@ import java.util.ArrayList;
  */
 public class Algorithm {
 
-	// tinyurl.com/chinesecheckersprotocol
+	// tinyurl.com/chinesecheckersprotocol ::: PROTOCOL LINK
+	// https://streamable.com/efxr ::: VIDEO DEMONSTRATION LINK
 
 	// Please dont make this less than 1
 	// Note that whatever the depth is, the algorithm will guaranteed reach the 
@@ -523,6 +524,19 @@ public class Algorithm {
 					col++;
 				}
 			}
+			if (lastRowFull) {
+				int row = 6, col = 4;
+				while (row < 13 && col < 11) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
 
 		} else if (color == 4) { // Green, top
 			for (int row = 16; row >= 0; row--) {
@@ -613,6 +627,19 @@ public class Algorithm {
 			if (lastRowFull) {
 				int row = 4, col = 7;
 				while (row < 10 && col < 13) {
+					if (board.getBoard()[row][col] == 0) {
+						lastRowFull = false;
+						targetPlaces.add(new Integer[] {row, col});
+					} else if (board.getBoard()[row][col] != -1) {
+						settledPieces.add(new Integer[] {row, col});
+					}
+					row++;
+					col++;
+				}
+			}
+			if (lastRowFull) {
+				int row = 4, col = 6;
+				while (row < 11 && col < 13) {
 					if (board.getBoard()[row][col] == 0) {
 						lastRowFull = false;
 						targetPlaces.add(new Integer[] {row, col});
