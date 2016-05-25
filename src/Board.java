@@ -273,8 +273,8 @@ public class Board {
 				}
 			}
 		}
-		if (isValidMove(originalRow, originalColumn, newRow, newColumn))
-			return true;
+//		if (isValidMove(originalRow, originalColumn, newRow, newColumn))
+//			return true;
 		return false;
 	}
 
@@ -389,20 +389,17 @@ public class Board {
 		
 		int currentTurn = 1;
 		while(true) {
-			for (int player = 1; player <= 4; player++) {
-				window.setTurn(currentTurn);
-				int[] move = Client.opening(player, currentTurn, newBoard);
-				if (move == null)
-					move = algorithms[player - 1].nextMove(newBoard);
-				System.out.println(Arrays.toString(move));
-				if (move != null)
-					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
-				window.refresh();
-				try {
-					Thread.sleep(50);
-				}
-				catch (Exception e) {
-
+			for (int player = 1; player <= 6; player++) {
+				if (player != 1 && player != 4) {
+					window.setTurn(currentTurn);
+					int[] move = Client.opening(player, currentTurn, newBoard);
+					if (move == null) {
+						move = algorithms[player - 1].nextMove(newBoard);
+					}
+					if (move != null)
+						System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+					window.refresh();
+					try {Thread.sleep(50);} catch (Exception e) {}
 				}
 			}
 			currentTurn++;

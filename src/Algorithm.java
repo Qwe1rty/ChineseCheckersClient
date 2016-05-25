@@ -13,7 +13,7 @@ public class Algorithm {
 	// Please dont make this less than 1
 	// Note that whatever the depth is, the algorithm will guaranteed reach the 
 	// max depth level assuming a single jump is possible anywhere at the start
-	private final static int DEPTH = 20; 
+	private final static int DEPTH = 1; 
 	
 	// Stores all pieces that have reached their final destinations
 	private ArrayList<Integer[]> settledPieces;
@@ -145,15 +145,9 @@ public class Algorithm {
 			if (newBoard.move(moveList.get(moveList.size() - 1)[0], moveList.get(moveList.size() - 1)[1], 
 					possibleMoves.get(i)[0], possibleMoves.get(i)[1])) {
 				
-				System.out.println("OMG FUCK YOU");
-
 				// If the first move is a jump and not a walk, search for all further moves
 				if (isJump(potentialMoves)) {
 					
-					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
-					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
-					System.out.println("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK");
-
 					// Search tree for best move
 					ArrayList<Integer[]> bestSubMoves = searchMoves(board, potentialMoves, depth + 1);
 
