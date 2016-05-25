@@ -393,30 +393,37 @@ public class Board {
 			algorithms[player] = new Algorithm(player + 1);
 		}
 
-		try {
-			Thread.sleep(500);
-		}
-		catch (Exception e) {
-		}
+		try {Thread.sleep(500);} catch (Exception e) {}
 		
 		int currentTurn = 1;
 		while(true) {
+//			for (int player = 1; player <= 6; player++) {
+//				System.out.println(player);
+//				window.setTurn(currentTurn);
+////				int[] move = Client.opening(player, currentTurn, newBoard);
+//				int[] move = null;
+//				if (move == null)
+//					move = algorithms[player - 1].nextMove(newBoard);
+//				System.out.println(Arrays.toString(move));
+//				if (move != null)
+//					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+//				window.refresh();
+//				try {
+//					Thread.sleep(50);
+//				}
+//				catch (Exception e) {
+//					
+//				}
+//			}
+			
 			for (int player = 1; player <= 6; player++) {
 				System.out.println(player);
 				window.setTurn(currentTurn);
-				int[] move = Client.opening(player, currentTurn, newBoard);
-				if (move == null)
-					move = algorithms[player - 1].nextMove(newBoard);
-				System.out.println(Arrays.toString(move));
+				int[] move = algorithms[player - 1].nextMove(newBoard);
 				if (move != null)
 					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
 				window.refresh();
-				try {
-					Thread.sleep(50);
-				}
-				catch (Exception e) {
-					
-				}
+				try {Thread.sleep(50);} catch (Exception e) {}
 			}
 			currentTurn++;
 		}

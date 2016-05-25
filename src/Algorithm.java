@@ -9,11 +9,9 @@ import java.util.ArrayList;
 public class Algorithm {
 
 	// tinyurl.com/chinesecheckersprotocol ::: PROTOCOL LINK
-	// https://streamable.com/efxr ::: VIDEO DEMONSTRATION LINK
+	// https://streamable.com/pho5 ::: VIDEO DEMONSTRATION LINK
 
 	// Please dont make this less than 1
-	// Note that whatever the depth is, the algorithm will guaranteed reach the 
-	// max depth level assuming a single jump is possible anywhere at the start
 	private final static int DEPTH = 16; 
 	
 	// Stores all pieces that have reached their final destinations
@@ -105,7 +103,7 @@ public class Algorithm {
 	 * @param moveList A list of moves taken on a certain branch
 	 * @param depth The current recursive iteration depth
 	 * @return An arraylist of the sequential moves of the branch that has progressed
-	 * most to the target
+	 * most to the target. If there are no moves, a blank arraylist will be returned
 	 */
 	private ArrayList<Integer[]> searchMoves(Board board, ArrayList<Integer[]> moveList, int depth) {
 
@@ -129,6 +127,7 @@ public class Algorithm {
 		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
 		
 		// Removes all previously visited possible moves
+		// This is the "dynamic" part that makes this DP
 		for (int i = possibleMoves.size() - 1; i >= 0; i--) {
 			for (int j = 0; j < moveList.size(); j++) {
 				if (possibleMoves.get(i)[0] == moveList.get(j)[0] && possibleMoves.get(i)[1] == moveList.get(j)[1]) {
@@ -200,7 +199,7 @@ public class Algorithm {
 			}
 		}
 
-		if (bestMoves == null) return new ArrayList<Integer[]>(); // Blank arraylists are disposed of later
+		// Returns best move
 		return bestMoves;
 	}
 
