@@ -146,7 +146,7 @@ public class Board {
 	 *  possibly using multiple jumps
 	 */
 	private boolean canJump(int originalRow, int originalColumn, int newRow, int newColumn, int[][] alreadyChecked){
-		System.out.println(originalRow + " " + originalColumn+ " " + newRow+ " " + newColumn);
+		//		System.out.println(originalRow + " " + originalColumn+ " " + newRow+ " " + newColumn);
 		// Check if this spot has already been visited
 		if (alreadyChecked[originalRow][originalColumn] == 1)
 			return false;
@@ -273,8 +273,8 @@ public class Board {
 				}
 			}
 		}
-//		if (isValidMove(originalRow, originalColumn, newRow, newColumn))
-//			return true;
+		//		if (isValidMove(originalRow, originalColumn, newRow, newColumn))
+		//			return true;
 		return false;
 	}
 
@@ -386,21 +386,19 @@ public class Board {
 		}
 		catch (Exception e) {
 		}
-		
+
 		int currentTurn = 1;
 		while(true) {
 			for (int player = 1; player <= 6; player++) {
-				if (player != 1 && player != 4) {
-					window.setTurn(currentTurn);
-					int[] move = Client.opening(player, currentTurn, newBoard);
-					if (move == null) {
-						move = algorithms[player - 1].nextMove(newBoard);
-					}
-					if (move != null)
-						System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
-					window.refresh();
-					try {Thread.sleep(50);} catch (Exception e) {}
+				window.setTurn(currentTurn);
+				int[] move = Client.opening(player, currentTurn, newBoard);
+				if (move == null) {
+					move = algorithms[player - 1].nextMove(newBoard);
 				}
+				if (move != null)
+					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+				window.refresh();
+				try {Thread.sleep(50);} catch (Exception e) {}
 			}
 			currentTurn++;
 		}

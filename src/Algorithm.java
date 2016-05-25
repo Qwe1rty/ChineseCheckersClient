@@ -13,7 +13,7 @@ public class Algorithm {
 	// Please dont make this less than 1
 	// Note that whatever the depth is, the algorithm will guaranteed reach the 
 	// max depth level assuming a single jump is possible anywhere at the start
-	private final static int DEPTH = 1; 
+	private final static int DEPTH = 8; 
 	
 	// Stores all pieces that have reached their final destinations
 	private ArrayList<Integer[]> settledPieces;
