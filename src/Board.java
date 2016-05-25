@@ -25,7 +25,7 @@ public class Board {
 	public static final int DIRECTION_EAST = 7;
 	public static final int DIRECTION_WEST = 8;
 	
-	private static boolean isTesting = true;
+	private static boolean isTesting = false;
 	
 	/** Creates a new board with the setup specified in BoardMap
 	 *  Precondition: BoardMap exists in the project folder and has been properly initialized
