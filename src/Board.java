@@ -417,11 +417,12 @@ public class Board {
 //			}
 			
 			for (int player = 1; player <= 6; player++) {
-				System.out.println(player);
+				//System.out.println(player);
 				window.setTurn(currentTurn);
 				int[] move = algorithms[player - 1].nextMove(newBoard);
 				if (move != null)
-					System.out.println(newBoard.move(move[0], move[1], move[2], move[3]));
+					if(!newBoard.move(move[0], move[1], move[2], move[3]))
+						System.out.println("false");
 				window.refresh();
 				try {Thread.sleep(50);} catch (Exception e) {}
 			}

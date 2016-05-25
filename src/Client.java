@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Client {
 	
-	public static final int SERVER_PORT = 420;
+	public static final int SERVER_PORT = 421;
 	
 	public static final int SERVER_MOVE = 1;
 	public static final int SERVER_NEW_GAME = 2;
@@ -149,7 +149,6 @@ public class Client {
 			boardWindow.setPlayer(player);
 			currentTurn = 1;
 			algorithm = new Algorithm(player);
-			boardWindow.setPlayer(1);
 			System.out.println("New Game");
 		}
 		else if (messageType == SERVER_PLACE_PIECE) {
