@@ -126,6 +126,16 @@ public class Algorithm {
 
 		// Looks for all possible moves for the current position
 		ArrayList<Integer[]> possibleMoves = findMoves(board, moveList.get(moveList.size() - 1), depth);
+		
+		// Removes all previously visited possible moves
+//		for (int i = possibleMoves.size() - 1; i >= 0; i--) {
+//			for (int j = 0; j < moveList.size(); j++) {
+//				if (possibleMoves.get(i)[0] == moveList.get(j)[0] && possibleMoves.get(i)[1] == moveList.get(j)[1]) {
+//					possibleMoves.remove(i);
+//					break;
+//				}
+//			}
+//		}
 
 		// Iterating through all possible moves
 		for (int i = 0; i < possibleMoves.size(); i++) {
@@ -212,7 +222,8 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0) 
 				return new Integer[] {currentPos[0], currentPos[1] - 1};
 			else if (board.getBoard()[currentPos[0]][currentPos[1] - 1] != -1
-					&& board.getBoard()[currentPos[0]][currentPos[1] - 1] == 0)
+					&& board.getBoard()[currentPos[0]][currentPos[1] - 1] != 0
+					&& board.getBoard()[currentPos[0]][currentPos[1] - 2] == 0)
 				return new Integer[] {currentPos[0], currentPos[1] - 2};
 			else return null;
 		} catch (Exception e) {return null;}
@@ -231,6 +242,7 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] == 0) 
 				return new Integer[] {currentPos[0] - 1, currentPos[1] - 1};
 			else if (board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] != -1
+					&& board.getBoard()[currentPos[0] - 1][currentPos[1] - 1] != 0
 					&& board.getBoard()[currentPos[0] - 2][currentPos[1] - 2] == 0)
 				return new Integer[] {currentPos[0] - 2, currentPos[1] - 2};
 			else return null;
@@ -250,6 +262,7 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0] - 1][currentPos[1]] == 0) 
 				return new Integer[] {currentPos[0] - 1, currentPos[1]};
 			else if (board.getBoard()[currentPos[0] - 1][currentPos[1]] != -1
+					&& board.getBoard()[currentPos[0] - 1][currentPos[1]] != 0
 					&& board.getBoard()[currentPos[0] - 2][currentPos[1]] == 0)
 				return new Integer[] {currentPos[0] - 2, currentPos[1]};
 			else return null;
@@ -269,7 +282,8 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0) 
 				return new Integer[] {currentPos[0], currentPos[1] + 1};
 			else if (board.getBoard()[currentPos[0]][currentPos[1] + 1] != -1
-					&& board.getBoard()[currentPos[0]][currentPos[1] + 1] == 0)
+					&& board.getBoard()[currentPos[0]][currentPos[1] + 1] != 0
+					&& board.getBoard()[currentPos[0]][currentPos[1] + 2] == 0)
 				return new Integer[] {currentPos[0], currentPos[1] + 2};
 			else return null;
 		} catch (Exception e) {return null;}
@@ -288,6 +302,7 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] == 0) 
 				return new Integer[] {currentPos[0] + 1, currentPos[1] + 1};
 			else if (board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] != -1
+					&& board.getBoard()[currentPos[0] + 1][currentPos[1] + 1] != 0
 					&& board.getBoard()[currentPos[0] + 2][currentPos[1] + 2] == 0)
 				return new Integer[] {currentPos[0] + 2, currentPos[1] + 2};
 			else return null;
@@ -307,6 +322,7 @@ public class Algorithm {
 			if (depth == 1 && board.getBoard()[currentPos[0] + 1][currentPos[1]] == 0) 
 				return new Integer[] {currentPos[0] + 1, currentPos[1]};
 			else if (board.getBoard()[currentPos[0] + 1][currentPos[1]] != -1
+					&& board.getBoard()[currentPos[0] + 1][currentPos[1]] != 0
 					&& board.getBoard()[currentPos[0] + 2][currentPos[1]] == 0)
 				return new Integer[] {currentPos[0] + 2, currentPos[1]};
 			else return null;
